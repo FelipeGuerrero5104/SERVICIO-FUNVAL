@@ -14,20 +14,19 @@ const LoginPage = ({ onLoginSuccess }) => {
         setLoading(true);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include',
+                credentials: 'include', 
                 body: JSON.stringify({ email, password }),
             });
+            const data = await response.json(); 
 
-            const data = await response.json();
-
-            if (response.ok) {
+            if (response.ok) { 
                 setMessage({ type: 'success', text: 'Inicio de sesión exitoso. Redirigiendo...' });
-                onLoginSuccess();
+                onLoginSuccess(); 
             } else {
                 setMessage({ type: 'error', text: data.message || 'Credenciales inválidas o error de servidor.' });
                 console.error('Error de inicio de sesión:', data);

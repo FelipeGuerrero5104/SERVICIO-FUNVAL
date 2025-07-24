@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const API_BASE_URL = 'https://www.hs-service.api.crealape.com/api/v1';
 
-const StudentRegistrationForm = ({ onLogout }) => {
+const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
     const [formData, setFormData] = useState({
         student_id: '',
         f_name: '',
@@ -12,9 +12,13 @@ const StudentRegistrationForm = ({ onLogout }) => {
         dob: '',
         email: '',
         phone: '',
+        password: '',
         school_id: '',
         status: 'active',
         role_id: 4,
+        country_id: '',
+        controller_id: currentUserId || null,
+        recruiter_id: currentUserId || null,
     });
 
     const [errors, setErrors] = useState({});
@@ -42,11 +46,15 @@ const StudentRegistrationForm = ({ onLogout }) => {
         if (!formData.f_name.trim()) { newErrors.f_name = 'El primer nombre es obligatorio.'; isValid = false; }
         if (!formData.f_lastname.trim()) { newErrors.f_lastname = 'El primer apellido es obligatorio.'; isValid = false; }
         if (!formData.dob.trim()) { newErrors.dob = 'La fecha de nacimiento es obligatoria.'; isValid = false; }
+        if (!formData.password.trim()) { newErrors.password = 'La contraseña es obligatoria.'; isValid = false; }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!formData.email.trim() || !emailRegex.test(formData.email.trim())) { newErrors.email = 'Ingresa un correo electrónico válido.'; isValid = false; }
-        const phoneRegex = /^[0-9\s\-+()]{7,20}$/;
+        
+        const phoneRegex = /^[0-9\s\-+()]{7,20}$/; 
         if (!formData.phone.trim() || !phoneRegex.test(formData.phone.trim())) { newErrors.phone = 'Ingresa un número de teléfono válido.'; isValid = false; }
+        
         if (!formData.school_id) { newErrors.school_id = 'Selecciona una escuela.'; isValid = false; }
+        if (!formData.country_id) { newErrors.country_id = 'Selecciona un país.'; isValid = false; }
 
         setErrors(newErrors);
         return isValid;
@@ -58,28 +66,31 @@ const StudentRegistrationForm = ({ onLogout }) => {
 
         if (validateForm()) {
             const finalStudentData = {
-                id: parseInt(formData.student_id),
+               
+                id: parseInt(formData.student_id), 
                 f_name: formData.f_name,
                 m_name: formData.m_name || null,
                 f_lastname: formData.f_lastname,
                 s_lastname: formData.s_lastname || null,
                 email: formData.email,
                 phone: formData.phone,
+                password: formData.password,
                 status: formData.status,
                 role_id: formData.role_id,
-                schools: [
-                    {
-                        id: parseInt(formData.school_id),
-                        name: document.querySelector(`#school_id option[value="${formData.school_id}"]`).textContent,
-                    }
-                ],
+                
+                
+                schools: [parseInt(formData.school_id)], 
+                
                 dob: formData.dob,
+                controller_id: formData.controller_id,
+                recruiter_id: formData.recruiter_id,
+                country_id: parseInt(formData.country_id),
             };
 
             console.log("Datos finales para la API:", finalStudentData);
 
             try {
-                const response = await fetch(`${API_BASE_URL}/students`, {
+                const response = await fetch(`${API_BASE_URL}/users`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -89,24 +100,43 @@ const StudentRegistrationForm = ({ onLogout }) => {
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
-                    setSubmissionMessage({ type: 'success', text: '¡Estudiante registrado exitosamente!' });
+                    const contentType = response.headers.get('content-type');
+                    
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = await response.json();
+                        setSubmissionMessage({ type: 'success', text: '¡Estudiante registrado exitosamente!' });
+                        console.log('Respuesta de la API:', data);
+                    } else {
+                        setSubmissionMessage({ type: 'success', text: '¡Estudiante registrado exitosamente! (Sin contenido de respuesta JSON)' });
+                        console.log('Respuesta de la API (no JSON o vacía):', await response.text());
+                    }
+                    
                     setFormData({
                         student_id: '', f_name: '', m_name: '', f_lastname: '', s_lastname: '', dob: '',
-                        email: '', phone: '', school_id: '', status: 'active', role_id: 4,
+                        email: '', phone: '', password: '', school_id: '', country_id: '', status: 'active', role_id: 4, 
+                        controller_id: currentUserId || null, 
+                        recruiter_id: currentUserId || null,  
                     });
                     setErrors({});
-                    console.log('Respuesta de la API:', data);
                 } else {
-                    const errorData = await response.json();
-                    throw new Error(`Error en el registro: ${response.status} - ${errorData.message || response.statusText}`);
+                    let errorMessage = `Error en el registro: ${response.status} - ${response.statusText}`;
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = `Error en el registro: ${response.status} - ${errorData.message || errorData.detail || JSON.stringify(errorData)}`;
+                        console.error('Error detallado de la API:', errorData);
+                    } catch {
+                        console.error('La respuesta de error no es JSON o está vacía:', await response.text());
+                    }
+                    setSubmissionMessage({ type: 'error', text: errorMessage });
+                    console.error('Error al enviar datos:', errorMessage);
+
+                    if (response.status === 401) {
+                        onLogout();
+                    }
                 }
             } catch (error) {
-                setSubmissionMessage({ type: 'error', text: `Error al registrar estudiante: ${error.message}` });
-                console.error('Error al enviar datos:', error);
-                if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-                    onLogout();
-                }
+                setSubmissionMessage({ type: 'error', text: `Error de red o del servidor: ${error.message}` });
+                console.error('Error de red o al procesar la respuesta:', error);
             }
         } else {
             setSubmissionMessage({ type: 'error', text: 'Por favor, corrige los errores en el formulario.' });
@@ -205,6 +235,38 @@ const StudentRegistrationForm = ({ onLogout }) => {
                                 />
                                 {errors.dob && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.dob}</span>}
                             </div>
+
+                            <div className={`mb-2 md:mb-0 ${errors.password ? 'text-red-600' : ''}`}>
+                                <label htmlFor="password" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Contraseña Inicial <span className="text-red-500">*</span></label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder="Contraseña para el estudiante"
+                                    required
+                                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                                />
+                                {errors.password && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.password}</span>}
+                            </div>
+
+                            <div className={`mb-2 md:mb-0 ${errors.country_id ? 'text-red-600' : ''}`}>
+                                <label htmlFor="country_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">País <span className="text-red-500">*</span></label>
+                                <select
+                                    id="country_id"
+                                    name="country_id"
+                                    value={formData.country_id}
+                                    onChange={handleChange}
+                                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.country_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                                >
+                                    <option value="">Selecciona un país</option>
+                                    <option value="1">Guatemala</option>
+                                    <option value="2">El Salvador</option>
+                                    <option value="3">Honduras</option>
+                                </select>
+                                {errors.country_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.country_id}</span>}
+                            </div>
                         </div>
                     </div>
                     <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
@@ -238,6 +300,7 @@ const StudentRegistrationForm = ({ onLogout }) => {
                             </div>
                         </div>
                     </div>
+
                     <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
                         <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">Información Académica</h2>
                         <div className={`mb-2 md:mb-0 ${errors.school_id ? 'text-red-600' : ''}`}>
@@ -258,7 +321,6 @@ const StudentRegistrationForm = ({ onLogout }) => {
                             {errors.school_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.school_id}</span>}
                         </div>
                     </div>
-
                     <div className="text-center mt-6 sm:mt-8">
                         <button
                             type="submit"
