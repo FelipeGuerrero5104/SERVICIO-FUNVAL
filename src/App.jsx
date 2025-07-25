@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import LandingPage from "./pages/LandingPage";
 import PrivateRoute from "./components/PrivateRoute";
 import { useAuth } from "./context/AuthContext";
+import UsuarioDetalle from "./pages/Admin/DetalleUsuario";
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -15,6 +16,7 @@ export default function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
+      <Route path="/usuarios/:id" element={<UsuarioDetalle />} />
     </Routes>
   );
 }

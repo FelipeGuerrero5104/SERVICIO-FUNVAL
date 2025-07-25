@@ -14,7 +14,7 @@ export default function Home() {
       <Header />
 
       <main className="p-6 max-w-6xl mx-auto mt-10">
-        {user?.role?.name?.toLowerCase() === "admin" ? (
+        {user?.role?.name === "Admin" ? (
           <ListaUsuarios/>
         ) : (
           <PerfilUsuario />

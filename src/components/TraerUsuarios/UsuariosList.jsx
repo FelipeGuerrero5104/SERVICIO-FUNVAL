@@ -40,6 +40,7 @@ export default function ListaUsuarios() {
           {usuarios.map((u) => (
             <UsuariosCard
             key={u.id}
+            id={u.id}
             name={u.role?.name}
             email={u.email}
             full_name={u.full_name}
