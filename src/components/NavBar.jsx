@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { logout as logoutRequest } from "../axios/auth";
+import { ROLES } from "../constants/roles";
 
 const NavBar = () => {
   const location = useLocation();
@@ -10,17 +11,18 @@ const NavBar = () => {
   const [userInitials, setUserInitials] = useState("");
   const { user, logout } = useAuth();
 
+  const role = user?.role?.name || ROLES.STUDENT;
+  const firstName = user?.f_name?.trim() || "Usuario";
+
   useEffect(() => {
     if (user?.f_name) {
-      const initials = user.f_name[0].toUpperCase();
-      if (user?.l_name) {
-        initials += user.l_name[0].toUpperCase();
+      let initials = user.f_name[0]?.toUpperCase() || "";
+      if (user?.f_lastname) {
+        initials += user.f_lastname[0]?.toUpperCase() || "";
       }
       setUserInitials(initials);
     }
   }, [user]);
-
-  const firstName = user?.f_name || "Usuario";
 
   const handleLogout = async () => {
     try {
@@ -32,6 +34,10 @@ const NavBar = () => {
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
+  };
+
+  const handleStudentServices = () => {
+    navigate("/servicios/crear");
   };
 
   return (
@@ -50,22 +56,84 @@ const NavBar = () => {
           </Link>
         )}
 
-        {location.pathname !== "/servicios" && (
-          <Link
-            to="/servicios"
-            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-          >
-            Servicios
-          </Link>
+        {role === ROLES.ADMIN && (
+          <>
+            {location.pathname !== "/servicios" && (
+              <Link
+                to="/servicios"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Servicios
+              </Link>
+            )}
+            {location.pathname !== "/categorias" && (
+              <Link
+                to="/categorias"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Categorías
+              </Link>
+            )}
+            {location.pathname !== "/usuarios" && (
+              <Link
+                to="/usuarios"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Usuarios
+              </Link>
+            )}
+          </>
         )}
 
-        {location.pathname !== "/categorias" && (
-          <Link
-            to="/categorias"
+        {role === ROLES.CONTROLLER && (
+          <>
+            {location.pathname !== "/reportes" && (
+              <Link
+                to="/reportes"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Reportes
+              </Link>
+            )}
+            {location.pathname !== "/validaciones" && (
+              <Link
+                to="/validaciones"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Validaciones
+              </Link>
+            )}
+          </>
+        )}
+
+        {role === ROLES.RECRUITER && (
+          <>
+            {location.pathname !== "/candidatos" && (
+              <Link
+                to="/candidatos"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Candidatos
+              </Link>
+            )}
+            {location.pathname !== "/vacantes" && (
+              <Link
+                to="/vacantes"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+              >
+                Vacantes
+              </Link>
+            )}
+          </>
+        )}
+
+        {role === ROLES.STUDENT && location.pathname !== "/servicios/crear" && (
+          <button
+            onClick={handleStudentServices}
             className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
           >
-            Categorías
-          </Link>
+            Agregar Servicios
+          </button>
         )}
       </div>
 
@@ -95,7 +163,7 @@ const NavBar = () => {
               </button>
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2  hover:bg-gray-100 text-red-600 hover:text-red-800 transition-colors"
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600 hover:text-red-800 transition-colors"
               >
                 Cerrar sesión
               </button>
