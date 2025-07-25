@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import { profile } from "./axios/profile";
+import StudentRegistrationForm from "./StudentRegistrationForm";
 
 function App() {
   const [profileData, setProfileData] = useState(null);
@@ -33,6 +34,7 @@ function App() {
         path="/profile"
         element={<Profile profileData={location.state?.profile ?? profileData} />}
       />
+      <Route path="/register" element={<StudentRegistrationForm/>}/>
     </Routes>
   );
 }
