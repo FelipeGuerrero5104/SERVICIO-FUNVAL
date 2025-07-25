@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import LandingPage from "./pages/LandingPage";
 import PrivateRoute from "./components/PrivateRoute";
 import { useAuth } from "./context/AuthContext";
+import UsuarioDetalle from "./pages/Admin/DetalleUsuario";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 
@@ -25,6 +26,7 @@ export default function App() {
           path="/home"
           element={user ? <Home /> : <Navigate to="/login" />}
         />
+        <Route path="/usuarios/:id" element={<UsuarioDetalle />} />
       </Routes>
       <Footer></Footer>
     </>
