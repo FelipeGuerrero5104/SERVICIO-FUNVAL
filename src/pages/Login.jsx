@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { login } from "../axios/auth";
-import { profile } from "../axios/profile";
+import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -13,7 +13,10 @@ export default function Login() {
     setLoading(true);
     setErrorMsg("");
 
-    const email = e.target.email.value;
+    const formData = new FormData(e.target);
+    const body = Object.fromEntries(formData.entries());
+
+    const email = body.email;
     if (!/\S+@\S+\.\S+/.test(email)) {
       setErrorMsg("Por favor, introduce un correo electrónico válido.");
       setLoading(false);
@@ -21,26 +24,9 @@ export default function Login() {
     }
 
     try {
-      const formData = new FormData(e.target);
-      const body = Object.fromEntries(formData.entries());
-      const { data, status } = await login(body);
-
-      if (status === 200) {
-        localStorage.setItem("token", data.token);
-        try {
-          const { data: me, status: s2 } = await profile();
-          if (s2 === 200) {
-            localStorage.setItem("userId", me.id);
-            navigate("/Home", { state: { profile: me } });
-          } else {
-            setErrorMsg("Error al cargar el perfil.");
-          }
-        } catch (error) {
-          setErrorMsg("Error al cargar el perfil.");
-        }
-      }
+      await login(body);
+      navigate("/home");
     } catch (error) {
-      console.error(error);
       setErrorMsg("Correo o contraseña incorrectos. Intenta nuevamente.");
     } finally {
       setLoading(false);
@@ -48,12 +34,10 @@ export default function Login() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gray-100 p-4 bg-cover bg-center"
-    >
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 bg-cover bg-center">
       <div className="w-full max-w-md bg-white/90 rounded-xl shadow-2xl p-8 sm:p-10 backdrop-blur-md">
         <div className="flex justify-center mb-8">
-
+          {/* Aquí puedes insertar un logo si deseas */}
         </div>
 
         <h2 className="text-3xl font-extrabold text-center text-[#023866] mb-6">

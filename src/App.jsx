@@ -1,42 +1,20 @@
-
-import { useState, useEffect } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import Login from "./pages/Login";
-import StudentRegistrationForm from "./pages/StudentRegistrationForm";
-import LandingPage from "./pages/LandingPage";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
+import LandingPage from "./pages/LandingPage";
+import PrivateRoute from "./components/PrivateRoute";
+import { useAuth } from "./context/AuthContext";
 
-function App() {
-  const [profileData, setProfileData] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+export default function App() {
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      try {
-        const { data, status } = await profile();
-        if (status === 200) setProfileData(data);
-      } catch (err) {
-        console.error("Error cargando perfil en App:", err);
-      }
-    };
-    fetchProfile();
-  }, []);
-
+  if (loading) return <p className="text-white">Cargando sesión...</p>;
   return (
+   
     <Routes>
-      <Route path="/" element={<LandingPage/>}/>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
-      <Route
-        path="/Home"
-        element={<Home profileData={location.state?.profile ?? profileData}/>}
-      />
-      <Route path="/register" element={<StudentRegistrationForm/>}/>
+      <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
     </Routes>
   );
 }
-
-
-export default App;
