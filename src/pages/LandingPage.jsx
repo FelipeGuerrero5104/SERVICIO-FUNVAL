@@ -15,7 +15,7 @@ export default function LandingPage() {
         </div>
       </nav>
       <main className="flex items-center justify-center h-full">
-        <h1 className="text-3xl font-bold text-gray-800">Bienvenido a la FUNVAL</h1>
+        <img src="HERO.gif" alt="gif funval" className="rounded-2xl w-[1150px] "/>
       </main>
     </div>
   );

@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import LandingPage from "./pages/LandingPage";
 import PrivateRoute from "./components/PrivateRoute";
 import { useAuth } from "./context/AuthContext";
+import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           element={user ? <Home /> : <Navigate to="/login" />}
         />
       </Routes>
+      <Footer></Footer>
     </>
   );
 }
