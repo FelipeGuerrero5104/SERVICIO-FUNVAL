@@ -3,7 +3,7 @@ import { FaApple, FaGooglePlay } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <div className="bg-neutral-800 p-10 flex  justify-between">
+    <div className="bg-neutral-800 p-10 flex  justify-between mt-20">
       <div>
         <div className="flex flex-col gap-3">
           <h3 className="text-white text-sm">Contact us</h3>
