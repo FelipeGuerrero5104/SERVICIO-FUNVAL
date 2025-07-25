@@ -31,7 +31,7 @@ export default function Login() {
           const { data: me, status: s2 } = await profile();
           if (s2 === 200) {
             localStorage.setItem("userId", me.id);
-            navigate("/profile", { state: { profile: me } });
+            navigate("/Home", { state: { profile: me } });
           } else {
             setErrorMsg("Error al cargar el perfil.");
           }

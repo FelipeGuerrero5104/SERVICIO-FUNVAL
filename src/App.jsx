@@ -1,11 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import { profile } from "./axios/profile";
-import StudentRegistrationForm from "./StudentRegistrationForm";
+import StudentRegistrationForm from "./pages/StudentRegistrationForm";
+import LandingPage from "./pages/LandingPage";
+import Home from "./pages/Home";
 
 function App() {
   const [profileData, setProfileData] = useState(null);
@@ -28,11 +27,11 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<LandingPage/>}/>
       <Route path="/login" element={<Login />} />
       <Route
-        path="/profile"
-        element={<Profile profileData={location.state?.profile ?? profileData} />}
+        path="/Home"
+        element={<Home profileData={location.state?.profile ?? profileData}/>}
       />
       <Route path="/register" element={<StudentRegistrationForm/>}/>
     </Routes>
