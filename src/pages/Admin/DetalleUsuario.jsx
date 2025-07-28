@@ -18,7 +18,7 @@ export default function DetalleUsuario() {
       try {
         const { data } = await instance.get(`/users/${id}`);
         setUsuario(data);
-        setCursoId(data.schools?.id || null); // ← guarda el ID
+        setCursoId(data.schools?.id || null);
       } catch (error) {
         console.error("Error al obtener usuario:", error);
       } finally {
@@ -56,9 +56,9 @@ export default function DetalleUsuario() {
     <div className="p-6 max-w-xl mx-auto flex flex-col bg-white shadow-md rounded mt-10">
       <button
         onClick={() => navigate(-1)}
-        className="mb-4 px-2 py-2 bg-blue-600 text-white rounded-sm  hover:bg-blue-800 cursor-pointer"
+        className="mb-4 px-2 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-800 cursor-pointer"
       >
-    Volver atrás
+        Volver atrás
       </button>
 
       <h2 className="text-2xl font-bold mb-2">{usuario.full_name}</h2>
@@ -92,7 +92,8 @@ export default function DetalleUsuario() {
             : "No asignado"}
         </p>
       </div>
-      {/* {user?.role?.name === "Admin" && (
+
+      {user?.role?.name === "Admin" && (
         <div className="mt-6">
           <label className="block mb-2 font-semibold">Actualizar Curso:</label>
           <select
@@ -103,18 +104,19 @@ export default function DetalleUsuario() {
             <option value="">Seleccionar curso</option>
             {cursos.map((curso) => (
               <option key={curso.id} value={curso.id}>
-                {curso.name}    
+                {curso.name}
               </option>
             ))}
           </select>
           <button
             onClick={actualizarCurso}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            disabled={!cursoId}
           >
             Guardar cambios
           </button>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

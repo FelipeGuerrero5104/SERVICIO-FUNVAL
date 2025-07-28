@@ -41,7 +41,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between px-8  bg-white shadow-md">
+    <nav className="flex items-center justify-between px-8 bg-white shadow-md">
       <Link to="/home" className="text-2xl font-bold text-blue-600">
         <img className="h-[70px]" src="/logo.png" alt="logo" />
       </Link>
