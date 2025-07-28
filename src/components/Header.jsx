@@ -1,14 +1,13 @@
-// src/components/Header.jsx
 import { useAuth } from "../context/AuthContext";
 import { logout as logoutRequest } from "../axios/auth";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const role = user.role?.name || "Usuario";
-  const firstName = user.f_name || "Usuario";
+  const role = user?.role?.name || "Usuario";
+  const firstName = user?.f_name || "Usuario";
 
   const handleLogout = async () => {
     try {

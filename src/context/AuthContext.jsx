@@ -1,4 +1,3 @@
-// AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { login as loginApi } from "../axios/auth";
 import { profile } from "../axios/profile";

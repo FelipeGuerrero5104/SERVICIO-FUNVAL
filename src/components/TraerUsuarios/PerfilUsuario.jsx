@@ -1,7 +1,5 @@
-// src/components/PerfilUsuario.jsx
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
-
 
 export default function PerfilUsuario() {
   const { user } = useAuth();

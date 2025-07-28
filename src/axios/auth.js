@@ -12,7 +12,7 @@ export async function login(body) {
 export async function logout() {
   try {
     const { data, status } = await instance.post("/auth/logout");
-    localStorage.removeItem("token"); 
+    localStorage.removeItem("token");
     localStorage.removeItem("userId");
     return { data, status };
   } catch (error) {
