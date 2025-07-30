@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import LandingPage from "./pages/LandingPage";
+import Services from "./pages/Services";
 import PrivateRoute from "./components/PrivateRoute";
 import { useAuth } from "./context/AuthContext";
 import UsuarioDetalle from "./pages/Admin/DetalleUsuario";
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/vacantes" element={<PrivateRoute><Vacantes /></PrivateRoute>} />
         <Route path="/servicios/crear" element={<PrivateRoute><Servicios /></PrivateRoute>} />
         <Route path="/register" element={<PrivateRoute><StudentRegistrationForm /></PrivateRoute>} />
+        <Route path="/services" element={user ? <Services /> : <Navigate to="/login" />} />
       </Routes>
       <Footer />
     </>

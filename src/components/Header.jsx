@@ -1,13 +1,13 @@
 import { useAuth } from "../context/AuthContext";
 import { logout as logoutRequest } from "../axios/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export default function Header() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const role = user?.role?.name || "Usuario";
-  const firstName = user?.f_name || "Usuario";
+  const role = user.role?.name || "Usuario";
+  const firstName = user.f_name || "Usuario";
 
   const handleLogout = async () => {
     try {
@@ -23,12 +23,26 @@ export default function Header() {
 
   return (
     <nav className="bg-[#023866] p-4 text-white flex flex-col md:flex-row items-center justify-between shadow-md">
-      <button
-        onClick={handleLogout}
-        className="bg-[#2c7ee2] hover:bg-blue-400 text-white text-sm font-semibold py-2 px-5 rounded-lg"
-      >
-        Cerrar Sesión
-      </button>
+      <div className="flex gap-4 items-center">
+        <button
+          onClick={handleLogout}
+          className="bg-[#2c7ee2] hover:bg-blue-400 text-white text-sm font-semibold py-2 px-5 rounded-lg"
+        >
+          Cerrar Sesión
+        </button>
+        <a
+          href="/home"
+          className="text-white hover:text-yellow-300 text-sm font-semibold"
+        >
+          Inicio
+        </a>
+        <a
+          href="/services"
+          className="text-white hover:text-yellow-300 text-sm font-semibold"
+        >
+          Servicios
+        </a>
+      </div>
       <div className="text-center md:text-left mt-2 md:mt-0">
         <h2 className="text-md md:text-lg font-semibold">
           Bienvenido, <span className="text-yellow-300">{firstName}</span>
