@@ -38,7 +38,7 @@ export default function DetalleUsuario() {
     fetchCursos();
   }, [id]);
 
-  const actualizarCurso = async () => {
+/*   const actualizarCurso = async () => {
     try {
       await instance.put(`/users/${id}`, {
         school_ids: [cursoId],
@@ -47,13 +47,13 @@ export default function DetalleUsuario() {
     } catch (error) {
       console.error("Error al actualizar curso:", error);
     }
-  };
+  }; */
 
   if (loading) return <p className="text-center mt-10">Cargando...</p>;
   if (!usuario) return <p>No se encontró el usuario</p>;
 
   return (
-    <div className="p-6 max-w-xl mx-auto flex flex-col bg-white shadow-md rounded mt-10">
+    <div className="p-6 max-w-xl mx-auto flex flex-col bg-white shadow-md rounded mt-10 mb-10">
       <button
         onClick={() => navigate(-1)}
         className="mb-4 px-2 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-800 cursor-pointer"
@@ -106,10 +106,10 @@ export default function DetalleUsuario() {
               <option key={curso.id} value={curso.id}>
                 {curso.name}
               </option>
-            ))}
+            ))} 
           </select>
           <button
-            onClick={actualizarCurso}
+            
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
             disabled={!cursoId}
           >
