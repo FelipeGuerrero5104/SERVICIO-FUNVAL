@@ -10,9 +10,10 @@ import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import StudentRegistrationForm from "./pages/StudentRegistrationForm";
 import Servicios from "./pages/Servicios";
+import Categorias from "./pages/Categorias";
+import Usuarios from "./pages/Usuarios";
 
 // Componentes placeholders para rutas restantes
-const Categorias = () => <div>Categorías (en desarrollo)</div>;
 const Reportes = () => <div>Reportes (en desarrollo)</div>;
 const Validaciones = () => <div>Validaciones (en desarrollo)</div>;
 const Candidatos = () => <div>Candidatos (en desarrollo)</div>;
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/perfil" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/servicios" element={<PrivateRoute><Servicios /></PrivateRoute>} />
         <Route path="/categorias" element={<PrivateRoute><Categorias /></PrivateRoute>} />
+        <Route path="/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
         <Route path="/reportes" element={<PrivateRoute><Reportes /></PrivateRoute>} />
         <Route path="/validaciones" element={<PrivateRoute><Validaciones /></PrivateRoute>} />
         <Route path="/candidatos" element={<PrivateRoute><Candidatos /></PrivateRoute>} />
