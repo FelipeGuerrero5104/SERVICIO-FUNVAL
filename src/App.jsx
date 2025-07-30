@@ -13,6 +13,7 @@ import Servicios from "./pages/Servicios";
 import Categorias from "./pages/Categorias";
 import Usuarios from "./pages/Usuarios";
 
+//RAMA DESARROLLO
 // Componentes placeholders para rutas restantes
 const Reportes = () => <div>Reportes (en desarrollo)</div>;
 const Validaciones = () => <div>Validaciones (en desarrollo)</div>;
