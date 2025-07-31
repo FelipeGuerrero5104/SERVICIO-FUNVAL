@@ -1,10 +1,13 @@
 // src/pages/Categorias.jsx
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useData } from "../Hooks/useData";
+import ModalCrearCategoria from "../components/Categoria/categoriaModal";
 
 export default function Categorias() {
-  const { data: categorias, loading, error } = useData("/categories");
+  const { data: categorias, loading, error, refetch } = useData("/categories");
   const { user } = useAuth();
+  const [modalCrearAbierto, setModalCrearAbierto] = useState(false);
 
   if (loading)
     return <p className="text-center mt-10">Cargando categorías...</p>;
@@ -18,7 +21,10 @@ export default function Categorias() {
       <div className="flex flex-col md:flex-row gap-3 md:gap-0 justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Categorías</h1>
         {user?.role?.name === "Admin" && (
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer">
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+            onClick={() => setModalCrearAbierto(true)}
+          >
             Agregar categoría
           </button>
         )}
@@ -50,6 +56,11 @@ export default function Categorias() {
           </div>
         ))}
       </div>
+      <ModalCrearCategoria
+        open={modalCrearAbierto}
+        onClose={() => setModalCrearAbierto(false)}
+        onSuccess={refetch}
+      />
     </div>
   );
 }

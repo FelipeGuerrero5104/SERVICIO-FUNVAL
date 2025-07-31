@@ -30,7 +30,7 @@ const AdminDashboard = () => {
       title: 'Escuelas',
       description: 'Gestionar escuelas asignadas',
       icon: <HiOfficeBuilding className="h-8 w-8 text-white" />,
-      onClick: () => navigate('/escuelas'),
+      onClick: () => navigate('/schools'),
     },
   ];
 

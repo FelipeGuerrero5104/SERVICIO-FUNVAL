@@ -14,14 +14,13 @@ import ChangePassword from "./pages/ChangePassword";
 import UpdateProfile from "./pages/UpdateProfile";
 import PerfilUsuario from "./components/TraerUsuarios/PerfilUsuario";
 import ListaUsuarios from "./components/TraerUsuarios/UsuariosList";
+import Categorias from "./pages/Categorias";
+import Schools from "./pages/Schools";
 
-
-const Categorias = () => <div>Categorías (en desarrollo)</div>;
 const Reportes = () => <div>Reportes (en desarrollo)</div>;
 const Validaciones = () => <div>Validaciones (en desarrollo)</div>;
 const Candidatos = () => <div>Candidatos (en desarrollo)</div>;
 const Vacantes = () => <div>Vacantes (en desarrollo)</div>;
-const Escuelas = () => <div>Escuelas (en desarrollo)</div>;
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -44,15 +43,16 @@ export default function App() {
         <Route path="/perfil" element={<PrivateRoute><PerfilUsuario /></PrivateRoute>} />
         <Route path="/servicios" element={<PrivateRoute><Services /></PrivateRoute>} />
         <Route path="/servicios/crear" element={<PrivateRoute><UserServices /></PrivateRoute>} />
-        <Route path="/categorias" element={<PrivateRoute><Categorias /></PrivateRoute>} />
+        <Route path="/categorias" element={<PrivateRoute><Categorias/></PrivateRoute>} />
         <Route path="/reportes" element={<PrivateRoute><Reportes /></PrivateRoute>} />
         <Route path="/validaciones" element={<PrivateRoute><Validaciones /></PrivateRoute>} />
         <Route path="/candidatos" element={<PrivateRoute><Candidatos /></PrivateRoute>} />
         <Route path="/vacantes" element={<PrivateRoute><Vacantes /></PrivateRoute>} />
-        <Route path="/escuelas" element={<PrivateRoute><Escuelas /></PrivateRoute>} />
+        <Route path="/schools" element={<PrivateRoute><Schools/></PrivateRoute>} />
         <Route path="/register" element={<PrivateRoute><StudentRegistrationForm /></PrivateRoute>} />
         <Route path="/change-password" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
+
       </Routes>
       <Footer />
     </>
