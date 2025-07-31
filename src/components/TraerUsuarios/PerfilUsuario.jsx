@@ -23,14 +23,17 @@ const PerfilUsuario = () => {
     user?.s_lastname,
   ]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
 
   const userInfo = [
-    { label: "Nombre Completo", value: fullName || "No disponible" },
-    { label: "Correo Electrónico", value: user?.email || "No disponible" },
-    { label: "Teléfono", value: user?.phone || "No disponible" },
-    { label: "Rol", value: user?.role?.name || "No disponible" },
-    { label: "ID de Usuario", value: user?.id || "No disponible" },
+    { label: 'Nombre Completo', value: fullName || 'No disponible' },
+    { label: 'Correo Electrónico', value: user?.email || 'No disponible' },
+    { label: 'Teléfono', value: user?.phone || 'No disponible' },
+    { label: 'Rol', value: user?.role?.name || 'No disponible' },
+    { label: 'ID de Usuario', value: user?.id || 'No disponible' },
+    ...(user?.role?.name === 'Student'
+      ? [{ label: 'Escuela', value: user?.school?.name || 'No asignada. Actualiza tu perfil.' }]
+      : []),
     { label: "Curso Estudiando", value: user?.course || "No especificado" },
   ];
 

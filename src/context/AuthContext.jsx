@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
     const { data } = await loginApi(credentials);
     localStorage.setItem("token", data.token);
     await loadUserProfile();
-    navigate("/"); // redirige al home después de iniciar sesión
+    navigate("/"); // Redirige al home después de iniciar sesión
   };
 
   const logout = () => {
@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, loadUserProfile }}>
       {children}
     </AuthContext.Provider>
   );
