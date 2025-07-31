@@ -1,4 +1,3 @@
-import Header from "../components/Header";
 import ServicesList from "../components/Services/ServicesList";
 import UserServices from "../components/Services/UserServices";
 import { useAuth } from "../context/AuthContext";
@@ -9,8 +8,6 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Header />
-      
       <main className="p-6 max-w-7xl mx-auto mt-10">
         {isAdmin ? <ServicesList /> : <UserServices />}
       </main>
