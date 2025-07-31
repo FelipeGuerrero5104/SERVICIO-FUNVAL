@@ -9,21 +9,18 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
   const { data: services, loading: servicesLoading, error: servicesError } = useData(`/services?user_id=${user.id}`);
 
-  // Calcular total de horas de servicios aprobados
   const totalHours = servicesLoading
     ? 0
     : services
         .filter((service) => service.status === 'approved')
         .reduce((sum, service) => sum + parseInt(service.hours || 0), 0);
 
-  // Obtener el estado del servicio más reciente
   const latestServiceStatus = servicesLoading
     ? 'Cargando...'
     : services.length > 0
     ? services.sort((a, b) => (b.id || 0) - (a.id || 0))[0].status || 'Sin servicios'
     : 'Sin servicios';
 
-  // Curso estudiando (asumimos que está en user.course; ajustar si viene de otro endpoint)
   const course = user?.course || 'No especificado';
 
   const cards = [
@@ -37,7 +34,7 @@ const StudentDashboard = () => {
       title: 'Curso Estudiando',
       value: course,
       icon: <HiAcademicCap className="h-8 w-8 text-white" />,
-      onClick: () => navigate('/perfil'), // Opcional: ajustar según necesidades
+      onClick: () => navigate('/perfil'),
     },
     {
       title: 'Estado de Servicio',
@@ -61,7 +58,7 @@ const StudentDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-start px-4 py-8 sm:px-6 lg:px-8">
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-7xl">
         <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
           Bienvenido, {user?.f_name || 'Estudiante'}
         </h1>
