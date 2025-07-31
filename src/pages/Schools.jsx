@@ -7,6 +7,7 @@ import {
   actualizarSchool,
   eliminarSchool,
 } from "../axios/schools";
+import BotonHome from "../components/BotonHome";
 
 export default function Schools() {
   const { user } = useAuth();
@@ -127,12 +128,15 @@ export default function Schools() {
         <h1 className="text-3xl font-bold">Escuelas</h1>
         {(user?.role?.name === "Admin" ||
           user?.role?.name === "Controller") && (
-          <button
-            onClick={handleCreateClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
-          >
-            Crear escuela
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={handleCreateClick}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+            >
+              Crear escuela
+            </button>
+            <BotonHome/>
+          </div>
         )}
       </div>
 
