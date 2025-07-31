@@ -23,7 +23,7 @@ const ChangePassword = () => {
     const newErrors = {};
     if (!formData.current_password) newErrors.current_password = 'Ingresa tu contraseña actual.';
     if (!formData.new_password) newErrors.new_password = 'Ingresa una nueva contraseña.';
-    if (formData.new_password.length < 6) newErrors.new_password = 'La nueva contraseña debe tener al menos 6 caracteres.';
+    else if (formData.new_password.length < 8) newErrors.new_password = 'La nueva contraseña debe tener al menos 8 caracteres.';
     if (formData.new_password !== formData.confirm_password) newErrors.confirm_password = 'Las contraseñas no coinciden.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -32,18 +32,33 @@ const ChangePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionMessage({ type: '', text: '' });
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      setSubmissionMessage({ type: 'error', text: 'Por favor, corrige los errores en el formulario.' });
+      return;
+    }
 
     setLoading(true);
     try {
-      await instance.patch('/users/password', {
-        current_password: formData.current_password,
+      const response = await instance.put('/auth/change-password', {
+        old_password: formData.current_password, // Cambiado a old_password
         new_password: formData.new_password,
       });
-      setSubmissionMessage({ type: 'success', text: 'Contraseña actualizada exitosamente.' });
-      setFormData({ current_password: '', new_password: '', confirm_password: '' });
+      if (response.status === 200 || response.status === 201 || response.status === 204) {
+        setSubmissionMessage({ type: 'success', text: 'Contraseña actualizada exitosamente.' });
+        setFormData({ current_password: '', new_password: '', confirm_password: '' });
+        setTimeout(() => navigate('/perfil'), 2000);
+      } else {
+        throw new Error('Respuesta inesperada del servidor.');
+      }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.detail || 'Error al cambiar la contraseña.';
+      console.error('Error en ChangePassword:', error.response); // Para depuración
+      const status = error.response?.status;
+      let errorMessage = 'Error al cambiar la contraseña.';
+      if (status === 400) {
+        errorMessage = error.response?.data?.message || error.response?.data?.detail || 'Contraseña actual incorrecta o nueva contraseña inválida.';
+      } else if (status === 401) {
+        errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+      }
       setSubmissionMessage({ type: 'error', text: errorMessage });
     } finally {
       setLoading(false);
@@ -100,12 +115,12 @@ const ChangePassword = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition disabled:opacity-50"
+            className="w-full bg-gradient-to-br from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-800 text-white font-bold py-2 rounded-lg transition disabled:opacity-50"
           >
             {loading ? 'Actualizando...' : 'Cambiar Contraseña'}
           </button>
           {submissionMessage.text && (
-            <p className={`mt-4 text-center ${submissionMessage.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`mt-4 text-center text-sm font-medium ${submissionMessage.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
               {submissionMessage.text}
             </p>
           )}

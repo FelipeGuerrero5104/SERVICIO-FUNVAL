@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import instance from '../axios/axiosConfig';
 
 const UpdateProfile = () => {
-  const { user } = useAuth();
+  const { user, loadUserProfile } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     f_name: user?.f_name || '',
@@ -38,14 +38,38 @@ const UpdateProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionMessage({ type: '', text: '' });
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      setSubmissionMessage({ type: 'error', text: 'Por favor, corrige los errores en el formulario.' });
+      return;
+    }
 
     setLoading(true);
     try {
-      await instance.patch(`/users/${user.id}`, formData);
-      setSubmissionMessage({ type: 'success', text: 'Datos actualizados exitosamente.' });
+      const response = await instance.put(`/users/${user.id}`, {
+        f_name: formData.f_name,
+        m_name: formData.m_name || null,
+        f_lastname: formData.f_lastname,
+        s_lastname: formData.s_lastname || null,
+        email: formData.email,
+        phone: formData.phone || null,
+      });
+      console.log('Respuesta de UpdateProfile:', response); // Para depuración
+      if (response.status === 200 || response.status === 201 || response.status === 204) {
+        setSubmissionMessage({ type: 'success', text: 'Datos actualizados exitosamente.' });
+        await loadUserProfile(); // Recargar el perfil para actualizar el contexto
+        setTimeout(() => navigate('/perfil'), 2000);
+      } else {
+        throw new Error('Respuesta inesperada del servidor.');
+      }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.detail || 'Error al actualizar los datos.';
+      console.error('Error en UpdateProfile:', error.response); // Para depuración
+      const status = error.response?.status;
+      let errorMessage = 'Error al actualizar los datos.';
+      if (status === 400) {
+        errorMessage = error.response?.data?.message || error.response?.data?.detail || 'Datos inválidos. Por favor, revisa los campos.';
+      } else if (status === 401) {
+        errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+      }
       setSubmissionMessage({ type: 'error', text: errorMessage });
     } finally {
       setLoading(false);
@@ -142,12 +166,12 @@ const UpdateProfile = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg transition disabled:opacity-50"
+            className="w-full bg-gradient-to-br from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-800 text-white font-bold py-2 rounded-lg transition disabled:opacity-50"
           >
             {loading ? 'Actualizando...' : 'Actualizar Datos'}
           </button>
           {submissionMessage.text && (
-            <p className={`mt-4 text-center ${submissionMessage.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`mt-4 text-center text-sm font-medium ${submissionMessage.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
               {submissionMessage.text}
             </p>
           )}
