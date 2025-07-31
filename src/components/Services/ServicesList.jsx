@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { obtenerServicios, obtenerCategorias } from "../../axios/services";
 import ServiceCard from "./ServiceCard";
 import ServiceReviewModal from "./ServiceReviewModal";
+import BotonHome from "../BotonHome";
 
 export default function ServicesList() {
   const [services, setServices] = useState([]);
@@ -9,13 +10,13 @@ export default function ServicesList() {
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
-  
+
   const [filters, setFilters] = useState({
     status: "",
     category: "",
     student: "",
     dateFrom: "",
-    dateTo: ""
+    dateTo: "",
   });
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function ServicesList() {
     try {
       const [servicesRes, categoriesRes] = await Promise.all([
         obtenerServicios(),
-        obtenerCategorias()
+        obtenerCategorias(),
       ]);
       setServices(servicesRes.data);
       setCategories(categoriesRes.data);
@@ -48,34 +49,57 @@ export default function ServicesList() {
     cargarDatos();
   };
 
-  const filteredServices = services.filter(service => {
+  const filteredServices = services.filter((service) => {
     // Status mapping: Approved = "1", Rejected = "2", Pending = null/"Pending"
     if (filters.status) {
-      if (filters.status === "pending" && service.status !== "Pending") return false;
-      if (filters.status === "approved" && service.status !== "Approved") return false;
-      if (filters.status === "rejected" && service.status !== "Rejected") return false;
+      if (filters.status === "pending" && service.status !== "Pending")
+        return false;
+      if (filters.status === "approved" && service.status !== "Approved")
+        return false;
+      if (filters.status === "rejected" && service.status !== "Rejected")
+        return false;
     }
-    if (filters.category && service.category?.id !== parseInt(filters.category)) return false;
-    if (filters.student && !service.user?.full_name?.toLowerCase().includes(filters.student.toLowerCase())) return false;
-    
+    if (filters.category && service.category?.id !== parseInt(filters.category))
+      return false;
+    if (
+      filters.student &&
+      !service.user?.full_name
+        ?.toLowerCase()
+        .includes(filters.student.toLowerCase())
+    )
+      return false;
+
     const serviceDate = service.updated_at || service.created_at;
-    if (filters.dateFrom && new Date(serviceDate) < new Date(filters.dateFrom)) return false;
-    if (filters.dateTo && new Date(serviceDate) > new Date(filters.dateTo)) return false;
+    if (filters.dateFrom && new Date(serviceDate) < new Date(filters.dateFrom))
+      return false;
+    if (filters.dateTo && new Date(serviceDate) > new Date(filters.dateTo))
+      return false;
     return true;
   });
 
-  if (loading) return <div className="text-center py-4">Cargando servicios...</div>;
+  if (loading)
+    return <div className="text-center py-4">Cargando servicios...</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-800">Gestión de Servicios</h1>
-      
+      <div className="md:flex justify-between">
+        <h1 className="text-center text-3xl font-bold text-gray-800">
+          Gestión de Servicios
+        </h1>
+        <div className="hidden md:block">
+          <BotonHome />
+        </div>
+      </div>
+
+      <div className="flex justify-center md:hidden">
+        <BotonHome />
+      </div>
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold mb-3">Filtros</h2>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <select
             value={filters.status}
-            onChange={(e) => setFilters({...filters, status: e.target.value})}
+            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
             className="border rounded px-3 py-2"
           >
             <option value="">Todos los estados</option>
@@ -83,37 +107,45 @@ export default function ServicesList() {
             <option value="approved">Aprobado</option>
             <option value="rejected">Rechazado</option>
           </select>
-          
+
           <select
             value={filters.category}
-            onChange={(e) => setFilters({...filters, category: e.target.value})}
+            onChange={(e) =>
+              setFilters({ ...filters, category: e.target.value })
+            }
             className="border rounded px-3 py-2"
           >
             <option value="">Todas las categorías</option>
-            {categories.map(cat => (
-              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
             ))}
           </select>
-          
+
           <input
             type="text"
             placeholder="Buscar estudiante..."
             value={filters.student}
-            onChange={(e) => setFilters({...filters, student: e.target.value})}
+            onChange={(e) =>
+              setFilters({ ...filters, student: e.target.value })
+            }
             className="border rounded px-3 py-2"
           />
-          
+
           <input
             type="date"
             value={filters.dateFrom}
-            onChange={(e) => setFilters({...filters, dateFrom: e.target.value})}
+            onChange={(e) =>
+              setFilters({ ...filters, dateFrom: e.target.value })
+            }
             className="border rounded px-3 py-2"
           />
-          
+
           <input
             type="date"
             value={filters.dateTo}
-            onChange={(e) => setFilters({...filters, dateTo: e.target.value})}
+            onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
             className="border rounded px-3 py-2"
           />
         </div>
@@ -132,10 +164,10 @@ export default function ServicesList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {filteredServices.map(service => (
-              <ServiceCard 
-                key={service.id} 
-                service={service} 
+            {filteredServices.map((service) => (
+              <ServiceCard
+                key={service.id}
+                service={service}
                 onReview={handleReview}
                 isAdmin={true}
               />

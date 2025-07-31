@@ -1,28 +1,148 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ROLES } from '../constants/roles';
 
 const API_BASE_URL = 'https://www.hs-service.api.crealape.com/api/v1';
 
-const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
+const StudentRegistrationForm = ({ currentUserId }) => {
   const [formData, setFormData] = useState({
-    student_id: '',
     f_name: '',
     m_name: '',
     f_lastname: '',
     s_lastname: '',
-    dob: '',
     email: '',
-    phone: '',
     password: '',
+    role: '',
     school_id: '',
-    status: 'active',
-    role_id: 4,
     country_id: '',
-    controller_id: currentUserId || null,
-    recruiter_id: currentUserId || null,
+    controller_id: '',
+    recruiter_id: '',
+    status: 'active'
   });
 
   const [errors, setErrors] = useState({});
   const [submissionMessage, setSubmissionMessage] = useState({ type: '', text: '' });
+  const [controllers, setControllers] = useState([]);
+  const [recruiters, setRecruiters] = useState([]);
+  const [schools, setSchools] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [roleIdMap, setRoleIdMap] = useState({});
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      
+      let controllerRoleId = null;
+      let recruiterRoleId = null;
+      
+      try {
+        const rolesResponse = await fetch(`${API_BASE_URL}/roles`, {
+          credentials: 'include'
+        });
+        if (rolesResponse.ok) {
+          const rolesData = await rolesResponse.json();
+          setRoles(rolesData);
+          
+          const mapping = {};
+          rolesData.forEach(role => {
+            if (role.name === 'Admin') mapping[ROLES.ADMIN] = role.id;
+            if (role.name === 'Controller') {
+              mapping[ROLES.CONTROLLER] = role.id;
+              controllerRoleId = role.id;
+            }
+            if (role.name === 'Recruiter') {
+              mapping[ROLES.RECRUITER] = role.id;
+              recruiterRoleId = role.id;
+            }
+            if (role.name === 'Student') mapping[ROLES.STUDENT] = role.id;
+          });
+          setRoleIdMap(mapping);
+        } else {
+          console.error('Error fetching roles:', rolesResponse.status);
+          setRoleIdMap({
+            [ROLES.ADMIN]: 1,
+            [ROLES.CONTROLLER]: 2,
+            [ROLES.RECRUITER]: 3,
+            [ROLES.STUDENT]: 4
+          });
+          controllerRoleId = 2;
+          recruiterRoleId = 3;
+        }
+      } catch (error) {
+        console.error('Error fetching roles:', error);
+        setRoleIdMap({
+          [ROLES.ADMIN]: 1,
+          [ROLES.CONTROLLER]: 2,
+          [ROLES.RECRUITER]: 3,
+          [ROLES.STUDENT]: 4
+        });
+        controllerRoleId = 2;
+        recruiterRoleId = 3;
+      }
+      
+      if (controllerRoleId) {
+        try {
+          const controllersResponse = await fetch(`${API_BASE_URL}/users?r=${controllerRoleId}`, {
+            credentials: 'include'
+          });
+          if (controllersResponse.ok) {
+            const controllersData = await controllersResponse.json();
+            setControllers(controllersData);
+          }
+        } catch (error) {
+          console.error('Error fetching controllers:', error);
+        }
+      }
+      
+      if (recruiterRoleId) {
+        try {
+          const recruitersResponse = await fetch(`${API_BASE_URL}/users?r=${recruiterRoleId}`, {
+            credentials: 'include'
+          });
+          if (recruitersResponse.ok) {
+            const recruitersData = await recruitersResponse.json();
+            setRecruiters(recruitersData);
+          }
+        } catch (error) {
+          console.error('Error fetching recruiters:', error);
+        }
+      }
+
+      try {
+        const schoolsResponse = await fetch(`${API_BASE_URL}/schools/`, {
+          credentials: 'include'
+        });
+        if (schoolsResponse.ok) {
+          const schoolsData = await schoolsResponse.json();
+          setSchools(schoolsData);
+        }
+      } catch (error) {
+        console.error('Error fetching schools:', error);
+      }
+      
+      try {
+        const countriesResponse = await fetch(`${API_BASE_URL}/countries`, {
+          credentials: 'include'
+        });
+        if (countriesResponse.ok) {
+          const countriesData = await countriesResponse.json();
+          setCountries(countriesData);
+        }
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +150,27 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
       ...prevData,
       [name]: value
     }));
+    
+    if (name === 'role') {
+      if (value === ROLES.ADMIN) {
+        setFormData(prev => ({
+          ...prev,
+          role: value,
+          school_id: '',
+          country_id: '',
+          controller_id: '',
+          recruiter_id: ''
+        }));
+      } else if (value === ROLES.CONTROLLER || value === ROLES.RECRUITER) {
+        setFormData(prev => ({
+          ...prev,
+          role: value,
+          controller_id: '',
+          recruiter_id: ''
+        }));
+      }
+    }
+    
     if (errors[name]) {
       setErrors(prevErrors => ({
         ...prevErrors,
@@ -42,23 +183,12 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
     let newErrors = {};
     let isValid = true;
 
-    if (!formData.student_id.trim()) {
-      newErrors.student_id = 'El ID del estudiante es obligatorio.';
-      isValid = false;
-    } else if (!/^[0-9]+$/.test(formData.student_id.trim())) {
-      newErrors.student_id = 'El ID del estudiante debe ser numérico.';
-      isValid = false;
-    }
     if (!formData.f_name.trim()) {
       newErrors.f_name = 'El primer nombre es obligatorio.';
       isValid = false;
     }
     if (!formData.f_lastname.trim()) {
       newErrors.f_lastname = 'El primer apellido es obligatorio.';
-      isValid = false;
-    }
-    if (!formData.dob.trim()) {
-      newErrors.dob = 'La fecha de nacimiento es obligatoria.';
       isValid = false;
     }
     if (!formData.password.trim()) {
@@ -73,18 +203,31 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
       newErrors.email = 'Ingresa un correo electrónico válido.';
       isValid = false;
     }
-    const phoneRegex = /^[0-9\s\-+()]{7,20}$/;
-    if (!formData.phone.trim() || !phoneRegex.test(formData.phone.trim())) {
-      newErrors.phone = 'Ingresa un número de teléfono válido.';
+    if (!formData.role) {
+      newErrors.role = 'Selecciona un rol.';
       isValid = false;
     }
-    if (!formData.school_id) {
-      newErrors.school_id = 'Selecciona una escuela.';
-      isValid = false;
+
+    if (formData.role === ROLES.CONTROLLER || formData.role === ROLES.RECRUITER || formData.role === ROLES.STUDENT) {
+      if (!formData.school_id) {
+        newErrors.school_id = 'Selecciona una escuela.';
+        isValid = false;
+      }
+      if (!formData.country_id) {
+        newErrors.country_id = 'Selecciona un país.';
+        isValid = false;
+      }
     }
-    if (!formData.country_id) {
-      newErrors.country_id = 'Selecciona un país.';
-      isValid = false;
+
+    if (formData.role === ROLES.STUDENT) {
+      if (!formData.controller_id) {
+        newErrors.controller_id = 'Selecciona un controller.';
+        isValid = false;
+      }
+      if (!formData.recruiter_id) {
+        newErrors.recruiter_id = 'Selecciona un recruiter.';
+        isValid = false;
+      }
     }
 
     setErrors(newErrors);
@@ -96,47 +239,62 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
     setSubmissionMessage({ type: '', text: '' });
 
     if (validateForm()) {
-      const finalStudentData = {
-        id: parseInt(formData.student_id),
+      if (!roleIdMap[formData.role]) {
+        setSubmissionMessage({ type: 'error', text: 'Error: No se pudo obtener el ID del rol. Por favor, recarga la página.' });
+        return;
+      }
+
+      const userData = {
         f_name: formData.f_name,
-        m_name: formData.m_name || null,
+        m_name: formData.m_name || '',
         f_lastname: formData.f_lastname,
-        s_lastname: formData.s_lastname || null,
+        s_lastname: formData.s_lastname || '',
         email: formData.email,
-        phone: formData.phone,
         password: formData.password,
-        status: formData.status,
-        role_id: formData.role_id,
-        schools: [parseInt(formData.school_id)],
-        dob: formData.dob,
-        controller_id: formData.controller_id,
-        recruiter_id: formData.recruiter_id,
-        country_id: parseInt(formData.country_id),
+        role_id: roleIdMap[formData.role]
       };
 
+      if (formData.role === ROLES.CONTROLLER || formData.role === ROLES.RECRUITER || formData.role === ROLES.STUDENT) {
+        userData.schools = [parseInt(formData.school_id)];
+        userData.country_id = parseInt(formData.country_id);
+      }
+
+      if (formData.role === ROLES.STUDENT) {
+        userData.controller_id = parseInt(formData.controller_id);
+        userData.recruiter_id = parseInt(formData.recruiter_id);
+      }
+
       try {
-        const response = await fetch(`${API_BASE_URL}/users`, {
+        const response = await fetch(`${API_BASE_URL}/users/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           credentials: 'include',
-          body: JSON.stringify(finalStudentData),
+          body: JSON.stringify(userData),
         });
 
         if (response.ok) {
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.includes('application/json')) {
             const data = await response.json();
-            setSubmissionMessage({ type: 'success', text: '¡Estudiante registrado exitosamente!' });
+            setSubmissionMessage({ type: 'success', text: '¡Usuario registrado exitosamente!' });
           } else {
-            setSubmissionMessage({ type: 'success', text: '¡Estudiante registrado exitosamente! (Sin contenido de respuesta JSON)' });
+            setSubmissionMessage({ type: 'success', text: '¡Usuario registrado exitosamente! (Sin contenido de respuesta JSON)' });
           }
           setFormData({
-            student_id: '', f_name: '', m_name: '', f_lastname: '', s_lastname: '', dob: '',
-            email: '', phone: '', password: '', school_id: '', country_id: '', status: 'active', role_id: 4,
-            controller_id: currentUserId || null,
-            recruiter_id: currentUserId || null,
+            f_name: '',
+            m_name: '',
+            f_lastname: '',
+            s_lastname: '',
+            email: '',
+            password: '',
+            role: '',
+            school_id: '',
+            country_id: '',
+            controller_id: '',
+            recruiter_id: '',
+            status: 'active'
           });
           setErrors({});
         } else {
@@ -144,13 +302,11 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
           try {
             const errorData = await response.json();
             errorMessage = `Error en el registro: ${response.status} - ${errorData.message || errorData.detail || JSON.stringify(errorData)}`;
-          } catch {
-            console.error('La respuesta de error no es JSON o está vacía:', await response.text());
+          } catch (parseError) {
+            const errorText = await response.text();
+            console.error('La respuesta de error no es JSON o está vacía:', errorText);
           }
           setSubmissionMessage({ type: 'error', text: errorMessage });
-          if (response.status === 401) {
-            onLogout();
-          }
         }
       } catch (error) {
         setSubmissionMessage({ type: 'error', text: `Error de red o del servidor: ${error.message}` });
@@ -163,33 +319,40 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
   return (
     <div className="flex justify-center items-start min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-gray-100 font-poppins text-gray-800">
       <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-full lg:max-w-4xl w-full my-5">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8 gap-4">
-          <h1 className="text-green-600 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center sm:text-left">Registrar Nuevo Estudiante</h1>
-          <button
-            onClick={onLogout}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-300 ease-in-out"
-          >
-            Cerrar Sesión
-          </button>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-green-600 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center">Registrar Nuevo Usuario</h1>
         </div>
 
+        {loading ? (
+          <div className="text-center py-10">
+            <p className="text-gray-600">Cargando datos...</p>
+          </div>
+        ) : (
         <form onSubmit={handleSubmit}>
+          <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
+            <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">Rol del Usuario</h2>
+            <div className={`mb-2 md:mb-0 ${errors.role ? 'text-red-600' : ''}`}>
+              <label htmlFor="role" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Rol <span className="text-red-500">*</span></label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.role ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+              >
+                <option value="">Selecciona un rol</option>
+                <option value={ROLES.ADMIN}>Administrador</option>
+                <option value={ROLES.CONTROLLER}>Controller</option>
+                <option value={ROLES.RECRUITER}>Recruiter</option>
+                <option value={ROLES.STUDENT}>Estudiante</option>
+              </select>
+              {errors.role && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.role}</span>}
+            </div>
+          </div>
+          
           <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
             <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">Información Personal</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <div className={`mb-2 md:mb-0 ${errors.student_id ? 'text-red-600' : ''}`}>
-                <label htmlFor="student_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">ID del Estudiante <span className="text-red-500">*</span></label>
-                <input
-                  type="text"
-                  id="student_id"
-                  name="student_id"
-                  value={formData.student_id}
-                  onChange={handleChange}
-                  placeholder="Ej: 12345"
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.student_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
-                />
-                {errors.student_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.student_id}</span>}
-              </div>
               <div className={`mb-2 md:mb-0 ${errors.f_name ? 'text-red-600' : ''}`}>
                 <label htmlFor="f_name" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Primer Nombre <span className="text-red-500">*</span></label>
                 <input
@@ -240,107 +403,128 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
                   className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out"
                 />
               </div>
-              <div className={`mb-2 md:mb-0 ${errors.dob ? 'text-red-600' : ''}`}>
-                <label htmlFor="dob" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Fecha de Nacimiento <span className="text-red-500">*</span></label>
-                <input
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.dob ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
-                />
-                {errors.dob && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.dob}</span>}
-              </div>
-              <div className={`mb-2 md:mb-0 ${errors.password ? 'text-red-600' : ''}`}>
-                <label htmlFor="password" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Contraseña Inicial <span className="text-red-500">*</span></label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Contraseña para el estudiante"
-                  required
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
-                />
-                {errors.password && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.password}</span>}
-              </div>
-              <div className={`mb-2 md:mb-0 ${errors.country_id ? 'text-red-600' : ''}`}>
-                <label htmlFor="country_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">País <span className="text-red-500">*</span></label>
-                <select
-                  id="country_id"
-                  name="country_id"
-                  value={formData.country_id}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.country_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
-                >
-                  <option value="">Selecciona un país</option>
-                  <option value="1">Guatemala</option>
-                  <option value="2">El Salvador</option>
-                  <option value="3">Honduras</option>
-                </select>
-                {errors.country_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.country_id}</span>}
-              </div>
             </div>
           </div>
-          <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
-            <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">Información de Contacto</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <div className={`mb-2 md:mb-0 ${errors.email ? 'text-red-600' : ''}`}>
-                <label htmlFor="email" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Correo Electrónico <span className="text-red-500">*</span></label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Ej: juan.perez@example.com"
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
-                />
-                {errors.email && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.email}</span>}
-              </div>
-              <div className={`mb-2 md:mb-0 ${errors.phone ? 'text-red-600' : ''}`}>
-                <label htmlFor="phone" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Número de Teléfono <span className="text-red-500">*</span></label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="Ej: 555-123-4567 o +502 1234 5678"
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
-                />
-                {errors.phone && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.phone}</span>}
-              </div>
-            </div>
-          </div>
-          <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
-            <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">Información Académica</h2>
-            <div className={`mb-2 md:mb-0 ${errors.school_id ? 'text-red-600' : ''}`}>
-              <label htmlFor="school_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Escuela <span className="text-red-500">*</span></label>
-              <select
-                id="school_id"
-                name="school_id"
-                value={formData.school_id}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-8 pb-5 border-b border-gray-200">
+            <div className={`mb-2 md:mb-0 ${errors.email ? 'text-red-600' : ''}`}>
+              <label htmlFor="email" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Correo Electrónico <span className="text-red-500">*</span></label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.school_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
-              >
-                <option value="">Selecciona una escuela</option>
-                <option value="1">Escuela Primaria Central</option>
-                <option value="2">Instituto Nacional de Bachillerato</option>
-                <option value="3">Colegio Bilingüe San Juan</option>
-                <option value="4">Universidad del Sol</option>
-              </select>
-              {errors.school_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.school_id}</span>}
+                placeholder="Ej: juan.perez@example.com"
+                className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+              />
+              {errors.email && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.email}</span>}
+            </div>
+            <div className={`mb-2 md:mb-0 ${errors.password ? 'text-red-600' : ''}`}>
+              <label htmlFor="password" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Contraseña <span className="text-red-500">*</span></label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Contraseña del usuario"
+                className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+              />
+              {errors.password && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.password}</span>}
             </div>
           </div>
+
+          {(formData.role === ROLES.CONTROLLER || formData.role === ROLES.RECRUITER || formData.role === ROLES.STUDENT) && (
+            <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
+              <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">Información Adicional</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                <div className={`mb-2 md:mb-0 ${errors.school_id ? 'text-red-600' : ''}`}>
+                  <label htmlFor="school_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Escuela <span className="text-red-500">*</span></label>
+                  <select
+                    id="school_id"
+                    name="school_id"
+                    value={formData.school_id}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.school_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                  >
+                    <option value="">Selecciona una escuela</option>
+                    {schools.map(school => (
+                      <option key={school.id} value={school.id}>{school.name}</option>
+                    ))}
+                  </select>
+                  {errors.school_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.school_id}</span>}
+                </div>
+                <div className={`mb-2 md:mb-0 ${errors.country_id ? 'text-red-600' : ''}`}>
+                  <label htmlFor="country_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">País <span className="text-red-500">*</span></label>
+                  <select
+                    id="country_id"
+                    name="country_id"
+                    value={formData.country_id}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.country_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                  >
+                    <option value="">Selecciona un país</option>
+                    {countries.map(country => (
+                      <option key={country.id} value={country.id}>{country.name}</option>
+                    ))}
+                  </select>
+                  {errors.country_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.country_id}</span>}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formData.role === ROLES.STUDENT && (
+            <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
+              <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">Asignación de Personal</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                <div className={`mb-2 md:mb-0 ${errors.controller_id ? 'text-red-600' : ''}`}>
+                  <label htmlFor="controller_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Controller <span className="text-red-500">*</span></label>
+                  <select
+                    id="controller_id"
+                    name="controller_id"
+                    value={formData.controller_id}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.controller_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                  >
+                    <option value="">Selecciona un controller</option>
+                    {controllers.map(controller => (
+                      <option key={controller.id} value={controller.id}>
+                        {controller.f_name} {controller.f_lastname}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.controller_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.controller_id}</span>}
+                </div>
+                <div className={`mb-2 md:mb-0 ${errors.recruiter_id ? 'text-red-600' : ''}`}>
+                  <label htmlFor="recruiter_id" className="block text-gray-700 text-sm sm:text-base font-semibold mb-2">Recruiter <span className="text-red-500">*</span></label>
+                  <select
+                    id="recruiter_id"
+                    name="recruiter_id"
+                    value={formData.recruiter_id}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${errors.recruiter_id ? 'border-red-500' : 'border-gray-300'} rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                  >
+                    <option value="">Selecciona un recruiter</option>
+                    {recruiters.map(recruiter => (
+                      <option key={recruiter.id} value={recruiter.id}>
+                        {recruiter.f_name} {recruiter.f_lastname}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.recruiter_id && <span className="text-red-600 text-xs sm:text-sm mt-1 block">{errors.recruiter_id}</span>}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="text-center mt-6 sm:mt-8">
             <button
               type="submit"
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
             >
-              Registrar Estudiante
+              Registrar Usuario
             </button>
           </div>
 
@@ -350,6 +534,7 @@ const StudentRegistrationForm = ({ onLogout, currentUserId }) => {
             </div>
           )}
         </form>
+        )}
       </div>
     </div>
   );
