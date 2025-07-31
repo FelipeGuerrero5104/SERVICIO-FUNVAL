@@ -1,24 +1,28 @@
-import axios from "axios";
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import instance from "../../axios/axiosConfig";
+
+
 export default function ModalCrearCategoria({ open, onClose, onSuccess }) {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const { user } = useAuth();
 
   if (!open) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/categories/", {
+      await instance.post("/categories/", {
         name: nombre,
         description: descripcion,
       });
-        console.log("Categoría creada exitosamente");
+
+      console.log("Categoría creada exitosamente");
       onClose();
-      onSuccess(); // Recargar lista
+      onSuccess(); // recargar la lista
     } catch (error) {
-      console.log("Error al crear la categoría");
-      console.error(error);
+      console.error("Error al crear la categoría:", error);
     }
   };
 
