@@ -12,9 +12,11 @@ import Servicios from "./pages/Servicios";
 import ChangePassword from "./pages/ChangePassword";
 import UpdateProfile from "./pages/UpdateProfile";
 import PerfilUsuario from "./components/TraerUsuarios/PerfilUsuario"; // Importamos PerfilUsuario
+import Categorias from "./pages/Categorias";
+import Usuarios from "./pages/Usuarios";
+import Schools from "./pages/Schools";
 
 // Componentes placeholders para rutas restantes
-const Categorias = () => <div>Categorías (en desarrollo)</div>;
 const Reportes = () => <div>Reportes (en desarrollo)</div>;
 const Validaciones = () => <div>Validaciones (en desarrollo)</div>;
 const Candidatos = () => <div>Candidatos (en desarrollo)</div>;
@@ -49,6 +51,19 @@ export default function App() {
         <Route path="/register" element={<PrivateRoute><StudentRegistrationForm /></PrivateRoute>} />
         <Route path="/change-password" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
+
+        <Route
+          path="/services"
+          element={user ? <Services /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/schools"
+          element={
+            <PrivateRoute>
+              <Schools />
+            </PrivateRoute>
+          }
+        />
       </Routes>
       <Footer />
     </>
