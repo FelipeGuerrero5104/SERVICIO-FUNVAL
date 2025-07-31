@@ -12,6 +12,7 @@ import StudentRegistrationForm from "./pages/StudentRegistrationForm";
 import Servicios from "./pages/Servicios";
 import Categorias from "./pages/Categorias";
 import Usuarios from "./pages/Usuarios";
+import Schools from "./pages/Schools";
 
 // Componentes placeholders para rutas restantes
 const Reportes = () => <div>Reportes (en desarrollo)</div>;
@@ -34,19 +35,114 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
-        <Route path="/usuarios/:id" element={<PrivateRoute><UsuarioDetalle /></PrivateRoute>} />
-        <Route path="/perfil" element={<PrivateRoute><Home /></PrivateRoute>} />
-        <Route path="/servicios" element={<PrivateRoute><Servicios /></PrivateRoute>} />
-        <Route path="/categorias" element={<PrivateRoute><Categorias /></PrivateRoute>} />
-        <Route path="/usuarios" element={<PrivateRoute><Usuarios /></PrivateRoute>} />
-        <Route path="/reportes" element={<PrivateRoute><Reportes /></PrivateRoute>} />
-        <Route path="/validaciones" element={<PrivateRoute><Validaciones /></PrivateRoute>} />
-        <Route path="/candidatos" element={<PrivateRoute><Candidatos /></PrivateRoute>} />
-        <Route path="/vacantes" element={<PrivateRoute><Vacantes /></PrivateRoute>} />
-        <Route path="/servicios/crear" element={<PrivateRoute><Servicios /></PrivateRoute>} />
-        <Route path="/register" element={<PrivateRoute><StudentRegistrationForm /></PrivateRoute>} />
-        <Route path="/services" element={user ? <Services /> : <Navigate to="/login" />} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/usuarios/:id"
+          element={
+            <PrivateRoute>
+              <UsuarioDetalle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/perfil"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/servicios"
+          element={
+            <PrivateRoute>
+              <Servicios />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/categorias"
+          element={
+            <PrivateRoute>
+              <Categorias />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <PrivateRoute>
+              <Usuarios />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/reportes"
+          element={
+            <PrivateRoute>
+              <Reportes />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/validaciones"
+          element={
+            <PrivateRoute>
+              <Validaciones />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/candidatos"
+          element={
+            <PrivateRoute>
+              <Candidatos />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/vacantes"
+          element={
+            <PrivateRoute>
+              <Vacantes />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/servicios/crear"
+          element={
+            <PrivateRoute>
+              <Servicios />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PrivateRoute>
+              <StudentRegistrationForm />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/services"
+          element={user ? <Services /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/schools"
+          element={
+            <PrivateRoute>
+              <Schools />
+            </PrivateRoute>
+          }
+        />
       </Routes>
       <Footer />
     </>
