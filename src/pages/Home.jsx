@@ -1,11 +1,10 @@
 import Header from "../components/Header";
-import PerfilUsuario from "../components/TraerUsuarios/PerfilUsuario";
+import StudentDashboard from "../components/StudentDashboard"; // Nuevo componente
 import ListaUsuarios from "../components/TraerUsuarios/UsuariosList";
 import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
   const { user } = useAuth();
-  const firstName = user?.f_name || "Usuario";
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -14,7 +13,7 @@ export default function Home() {
         {user?.role?.name === "Admin" ? (
           <ListaUsuarios />
         ) : (
-          <PerfilUsuario />
+          <StudentDashboard />
         )}
       </main>
     </div>
