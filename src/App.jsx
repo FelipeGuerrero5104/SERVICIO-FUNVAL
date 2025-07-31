@@ -15,6 +15,7 @@ import PerfilUsuario from "./components/TraerUsuarios/PerfilUsuario"; // Importa
 import Categorias from "./pages/Categorias";
 import Usuarios from "./pages/Usuarios";
 import Schools from "./pages/Schools";
+import Services from "./pages/Services";
 
 // Componentes placeholders para rutas restantes
 const Reportes = () => <div>Reportes (en desarrollo)</div>;
@@ -41,7 +42,6 @@ export default function App() {
         <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/usuarios/:id" element={<PrivateRoute><UsuarioDetalle /></PrivateRoute>} />
         <Route path="/perfil" element={<PrivateRoute><PerfilUsuario /></PrivateRoute>} /> {/* Cambiado a PerfilUsuario */}
-        <Route path="/servicios" element={<PrivateRoute><Servicios /></PrivateRoute>} />
         <Route path="/categorias" element={<PrivateRoute><Categorias /></PrivateRoute>} />
         <Route path="/reportes" element={<PrivateRoute><Reportes /></PrivateRoute>} />
         <Route path="/validaciones" element={<PrivateRoute><Validaciones /></PrivateRoute>} />
@@ -51,6 +51,7 @@ export default function App() {
         <Route path="/register" element={<PrivateRoute><StudentRegistrationForm /></PrivateRoute>} />
         <Route path="/change-password" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
+        <Route path="/usuarios" element={<PrivateRoute><Usuarios/> </PrivateRoute>} />
 
         <Route
           path="/services"
