@@ -12,8 +12,8 @@ const StudentDashboard = () => {
   const totalHours = servicesLoading
     ? 0
     : services
-        .filter((service) => service.status === 'approved')
-        .reduce((sum, service) => sum + parseInt(service.hours || 0), 0);
+        .filter((service) => service.status === 'Approved')
+        .reduce((sum, service) => sum + parseInt(service.amount_approved || 0), 0);
 
   const latestServiceStatus = servicesLoading
     ? 'Cargando...'
@@ -21,18 +21,18 @@ const StudentDashboard = () => {
     ? services.sort((a, b) => (b.id || 0) - (a.id || 0))[0].status || 'Sin servicios'
     : 'Sin servicios';
 
-  const course = user?.course || 'No especificado';
+  const school = user?.schools?.[0]?.name || 'No especificado';
 
   const cards = [
     {
       title: 'Horas de Servicio',
-      value: servicesLoading ? 'Cargando...' : `${totalHours} horas`,
+      value: servicesLoading ? 'Cargando...' : `${totalHours} horas aprobadas`,
       icon: <HiClock className="h-8 w-8 text-white" />,
       onClick: () => navigate('/servicios'),
     },
     {
-      title: 'Curso Estudiando',
-      value: course,
+      title: 'Escuela',
+      value: school,
       icon: <HiAcademicCap className="h-8 w-8 text-white" />,
       onClick: () => navigate('/perfil'),
     },

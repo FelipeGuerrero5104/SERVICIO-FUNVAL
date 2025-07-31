@@ -53,22 +53,28 @@ const UpdateProfile = () => {
         email: formData.email,
         phone: formData.phone || null,
       });
-      console.log('Respuesta de UpdateProfile:', response); // Para depuración
+      console.log('Respuesta de UpdateProfile:', { status: response.status, data: response.data }); // Depuración
       if (response.status === 200 || response.status === 201 || response.status === 204) {
         setSubmissionMessage({ type: 'success', text: 'Datos actualizados exitosamente.' });
-        await loadUserProfile(); // Recargar el perfil para actualizar el contexto
+        await loadUserProfile(); // Recargar el perfil usando GET /auth/profile
         setTimeout(() => navigate('/perfil'), 2000);
       } else {
-        throw new Error('Respuesta inesperada del servidor.');
+        setSubmissionMessage({ type: 'error', text: `Respuesta inesperada del servidor: ${response.status}` });
       }
     } catch (error) {
-      console.error('Error en UpdateProfile:', error.response); // Para depuración
+      console.error('Error en UpdateProfile:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      }); // Depuración
       const status = error.response?.status;
       let errorMessage = 'Error al actualizar los datos.';
-      if (status === 400) {
-        errorMessage = error.response?.data?.message || error.response?.data?.detail || 'Datos inválidos. Por favor, revisa los campos.';
+      if (status === 400 || status === 422) {
+        errorMessage = error.response?.data?.message || error.response?.data?.detail || JSON.stringify(error.response?.data) || 'Datos inválidos. Por favor, revisa los campos.';
       } else if (status === 401) {
         errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
+      } else {
+        errorMessage = `Error del servidor: ${status || error.message}`;
       }
       setSubmissionMessage({ type: 'error', text: errorMessage });
     } finally {

@@ -12,7 +12,6 @@ const PerfilUsuario = () => {
   const [uploading, setUploading] = useState(false);
   const [submissionMessage, setSubmissionMessage] = useState({ type: '', text: '' });
 
- 
   const fullName = [
     user?.f_name,
     user?.m_name,
@@ -22,14 +21,15 @@ const PerfilUsuario = () => {
     .filter(Boolean)
     .join(' ');
 
-
   const userInfo = [
     { label: 'Nombre Completo', value: fullName || 'No disponible' },
     { label: 'Correo Electrónico', value: user?.email || 'No disponible' },
     { label: 'Teléfono', value: user?.phone || 'No disponible' },
     { label: 'Rol', value: user?.role?.name || 'No disponible' },
     { label: 'ID de Usuario', value: user?.id || 'No disponible' },
-    { label: 'Curso Estudiando', value: user?.course || 'No especificado' },
+    ...(user?.role?.name === 'Student'
+      ? [{ label: 'Escuela', value: user?.school?.name || 'No asignada. Actualiza tu perfil.' }]
+      : []),
   ];
 
   const handleProfilePictureChange = (e) => {
@@ -88,7 +88,6 @@ const PerfilUsuario = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-start px-4 py-8 sm:px-6 lg:px-8">
       <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
-    
         <div className="w-full lg:w-1/3 bg-white shadow-xl rounded-lg overflow-hidden">
           <div className="bg-gradient-to-br from-blue-800 to-blue-900 h-24 flex items-center justify-center">
             <h2 className="text-white text-xl font-bold">Mi Perfil</h2>
