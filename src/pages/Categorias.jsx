@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useData } from "../Hooks/useData";
-import ModalCrearCategoria from "../components/Categoria/categoriaModal";
+import ModalCrearCategoria from "../components/categoria/categoriaModal";
 
 export default function Categorias() {
   const { data: categorias, loading, error, refetch } = useData("/categories");
