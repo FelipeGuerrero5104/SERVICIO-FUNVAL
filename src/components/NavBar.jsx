@@ -82,13 +82,13 @@ const NavBar = () => {
                     navigate("/perfil");
                     setIsProfileOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
                 >
                   Ver perfil
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 text-red-600 hover:text-red-800 transition-colors"
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 text-red-600 hover:text-red-800 transition-colors cursor-pointer"
                 >
                   Cerrar sesión
                 </button>
@@ -120,7 +120,7 @@ const NavBar = () => {
                       navigate("/perfil");
                       setIsProfileOpen(false);
                     }}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +138,7 @@ const NavBar = () => {
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-50 text-red-600 hover:text-red-800 transition-colors"
+                    className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-200 text-red-600 hover:text-red-800 transition-colors cursor-pointer"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

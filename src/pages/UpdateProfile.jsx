@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import instance from '../axios/axiosConfig';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const UpdateProfile = () => {
   const { user, loadUserProfile } = useAuth();
@@ -79,6 +80,13 @@ const UpdateProfile = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4 py-8">
       <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full">
+        <button
+                  onClick={() => navigate("/home")}
+                  className="bg-black p-1 mt-4 rounded-full text-white absolute transform -translate-y-1/2 text-2xl hover:text-gray-300"
+                  title="Volver"
+                >
+                  <FaArrowLeft />
+                </button>
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Actualizar Datos</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -166,7 +174,7 @@ const UpdateProfile = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-br from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-800 text-white font-bold py-2 rounded-lg transition disabled:opacity-50"
+            className="w-full bg-gradient-to-br from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-800 text-white font-bold py-2 rounded-lg transition disabled:opacity-50 cursor-pointer"
           >
             {loading ? 'Actualizando...' : 'Actualizar Datos'}
           </button>

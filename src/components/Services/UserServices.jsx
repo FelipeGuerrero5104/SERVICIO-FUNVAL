@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { obtenerServicios } from "../../axios/services";
 import ServiceCard from "./ServiceCard";
 import ServiceForm from "./ServiceForm";
+import BotonHome from "../BotonHome";
 
 export default function UserServices() {
   const [services, setServices] = useState([]);
@@ -41,14 +42,17 @@ export default function UserServices() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-5">
         <h1 className="text-3xl font-bold text-gray-800">Mis Servicios Sociales</h1>
-        <button
+        <div className="flex gap-4">
+          <button
           onClick={() => setShowForm(true)}
           className="bg-[#2c7ee2] text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Nuevo Servicio
         </button>
+        <BotonHome/>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
