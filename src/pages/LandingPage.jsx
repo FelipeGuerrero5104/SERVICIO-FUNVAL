@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 export default function LandingPage() {
   const navigate = useNavigate();
   return (
-    <div className="h-screen">
+    <div className="h-screen  w-screen">
       <nav className="p-2 text-white flex items-center justify-between bg-[#023866]">
         <div>
           <button
