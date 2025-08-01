@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -31,6 +33,10 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSocialLogin = (provider) => {
+    setErrorMsg(`Inicio de sesión con ${provider} no disponible actualmente.`);
   };
 
   return (
@@ -90,11 +96,44 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
+
             className="w-full flex justify-center items-center bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2c7ee2] focus:ring-opacity-75"
+
           >
             {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>
         </form>
+
+        <div className="mt-6 space-y-3">
+          <button
+            onClick={() => handleSocialLogin("GitHub")}
+            disabled={loading}
+            className="w-full flex justify-center items-center bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-opacity-75 disabled:opacity-50"
+          >
+            <FaGithub className="mr-2 h-5 w-5" />
+            Iniciar Sesión con GitHub
+          </button>
+          <button
+            onClick={() => handleSocialLogin("Google")}
+            disabled={loading}
+            className="w-full flex justify-center items-center bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2c7ee2] focus:ring-opacity-75 disabled:opacity-50"
+          >
+            <FcGoogle className="mr-2 h-5 w-5" />
+            Iniciar Sesión con Google
+          </button>
+          <button
+            onClick={() => handleSocialLogin("Cuenta de la Iglesia")}
+            disabled={loading}
+            className="w-full flex justify-center items-center bg-[#007DA5] hover:bg-[#005F7F] text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#007DA5] focus:ring-opacity-75 disabled:opacity-50"
+          >
+            <img
+              src="https://edge.fscdn.org/assets/static/media/church-symbol-new-46.7b4e672a10b119f73cf1.png"
+              alt="Church Account"
+              className="mr-2 h-5 w-5"
+            />
+            Continúa con Cuenta de la Iglesia
+          </button>
+        </div>
 
         <p className="mt-6 text-center text-sm text-gray-600">
           ¿No tienes una cuenta?{" "}
