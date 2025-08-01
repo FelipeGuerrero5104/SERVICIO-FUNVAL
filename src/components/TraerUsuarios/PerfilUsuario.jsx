@@ -26,20 +26,21 @@ const PerfilUsuario = () => {
     .join(" ");
 
   const userInfo = [
-    { label: "Nombre Completo", value: fullName || "No disponible" },
-    { label: "Correo Electrónico", value: user?.email || "No disponible" },
-    { label: "Teléfono", value: user?.phone || "No disponible" },
-    { label: "Rol", value: user?.role?.name || "No disponible" },
-    { label: "ID de Usuario", value: user?.id || "No disponible" },
+
     ...(user?.role?.name === "Student"
       ? [
           {
             label: "Escuela",
-            value: user?.school?.name || "No asignada. Actualiza tu perfil.",
+            value: user?.schools?.[0]?.name || "No asignada. Actualiza tu perfil.",
           },
         ]
       : []),
-    { label: "Curso Estudiando", value: user?.course || "No especificado" },
+    { label: "Rol", value: user?.role?.name || "No disponible" },
+    { label: "ID de Usuario", value: user?.id || "No disponible" },
+    { label: "Nombre Completo", value: fullName || "No disponible" },
+    { label: "Correo Electrónico", value: user?.email || "No disponible" },
+    { label: "Teléfono", value: user?.phone || "No disponible" },
+ 
   ];
 
   const handleProfilePictureChange = (e) => {
@@ -173,6 +174,22 @@ const PerfilUsuario = () => {
                 </span>
               </div>
             ))}
+            {user?.role?.name === "Admin" && (
+              <div className="col-span-1 sm:col-span-2 flex justify-center gap-4 mt-4">
+                <button
+                  onClick={() => navigate("/change-password")}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition"
+                >
+                  Cambiar Contraseña
+                </button>
+                <button
+                  onClick={() => navigate("/update-profile")}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition"
+                >
+                  Modificar Datos
+                </button>
+              </div>
+            )}
           </div>
           {submissionMessage.text && (
             <div className="p-6">

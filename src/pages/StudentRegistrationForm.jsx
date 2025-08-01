@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ROLES } from "../constants/roles";
+import { useNavigate } from "react-router";
+import { FaArrowLeft } from "react-icons/fa";
 
 const API_BASE_URL = "https://www.hs-service.api.crealape.com/api/v1";
 
@@ -30,6 +32,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
   const [roles, setRoles] = useState([]);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const [roleIdMap, setRoleIdMap] = useState({});
 
@@ -357,6 +360,13 @@ const StudentRegistrationForm = ({ currentUserId }) => {
     <div className="flex justify-center items-start min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-gray-100 font-poppins text-gray-800 dark:bg-slate-900 ">
       <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-full lg:max-w-4xl w-full my-5 dark:bg-[#2b2b2b]">
         <div className="mb-6 sm:mb-8">
+          <button
+            onClick={() => navigate(-1)}
+            className="absolute mt-6 p-2 px-4 rounded transform -translate-y-1/2 text-white bg-green-600 text-lg hover:text-gray-300 flex items-center gap-1"
+            title="Volver al inicio"
+          >
+            <FaArrowLeft />
+          </button>
           <h1 className="text-green-600 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center dark:text-[#ffb400]">
             Registrar Nuevo Usuario
           </h1>
@@ -391,6 +401,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:bg-[#222222]`}
+
                 >
                   <option value="">Selecciona un rol</option>
                   <option value={ROLES.ADMIN}>Administrador</option>
@@ -405,9 +416,9 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                 )}
               </div>
             </div>
-
             <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0 dark:border-gray-700">
               <h2 className="dark:text-[#1e88e5] mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300 dark:border-gray-700">
+
                 Información Personal
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -419,6 +430,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   <label
                     htmlFor="f_name"
                     className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300 "
+
                   >
                     Primer Nombre <span className="text-red-500">*</span>
                   </label>
@@ -434,6 +446,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                         ? "border-red-500"
                         : "border-gray-300 dark:border-gray-600"
                     } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:bg-[#222222]`}
+
                   />
                   {errors.f_name && (
                     <span className="text-red-600 text-xs sm:text-sm mt-1 block">
@@ -445,6 +458,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   <label
                     htmlFor="m_name"
                     className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                   >
                     Segundo Nombre (opcional)
                   </label>
@@ -456,6 +470,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     onChange={handleChange}
                     placeholder="Ej: Carlos"
                     className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:text-gray-400 dark:bg-[#222222]"
+
                   />
                 </div>
                 <div
@@ -466,6 +481,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   <label
                     htmlFor="f_lastname"
                     className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                   >
                     Primer Apellido <span className="text-red-500">*</span>
                   </label>
@@ -480,6 +496,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       errors.f_lastname
                         ? "border-red-500"
                         : "border-gray-300 dark:border-gray-600"
+
+
                     } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                   />
                   {errors.f_lastname && (
@@ -492,6 +510,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   <label
                     htmlFor="s_lastname"
                     className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                   >
                     Segundo Apellido (opcional)
                   </label>
@@ -503,18 +522,20 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     onChange={handleChange}
                     placeholder="Ej: García"
                     className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:text-gray-400 dark:bg-[#222222]"
+
                   />
                 </div>
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
+
               <div
                 className={`mb-2 md:mb-0 ${errors.email ? "text-red-600" : ""}`}
               >
                 <label
                   htmlFor="email"
                   className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                 >
                   Correo Electrónico <span className="text-red-500">*</span>
                 </label>
@@ -529,6 +550,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     errors.email
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
+
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                 />
                 {errors.email && (
@@ -544,7 +566,9 @@ const StudentRegistrationForm = ({ currentUserId }) => {
               >
                 <label
                   htmlFor="password"
+
                   className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                 >
                   Contraseña <span className="text-red-500">*</span>
                 </label>
@@ -555,10 +579,12 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Contraseña del usuario"
+
                   className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-400 dark:bg-[#222222] ${
                     errors.password
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
+
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                 />
                 {errors.password && (
@@ -730,7 +756,9 @@ const StudentRegistrationForm = ({ currentUserId }) => {
             <div className="text-center mt-6 sm:mt-8">
               <button
                 type="submit"
+
                 className="bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] hover:text-[#ffb400] text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+
               >
                 Registrar Usuario
               </button>
