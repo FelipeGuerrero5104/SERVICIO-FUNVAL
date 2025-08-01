@@ -610,7 +610,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   >
                     <label
                       htmlFor="school_id"
-                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
                     >
                       Escuela <span className="text-red-500">*</span>
                     </label>
@@ -619,7 +619,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       name="school_id"
                       value={formData.school_id}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
+                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-600 dark:bg-[#222222] ${
                         errors.school_id ? "border-red-500" : "border-gray-300"
                       } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                     >
@@ -643,7 +643,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   >
                     <label
                       htmlFor="country_id"
-                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
                     >
                       País <span className="text-red-500">*</span>
                     </label>
@@ -652,7 +652,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       name="country_id"
                       value={formData.country_id}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
+                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-600 dark:bg-[#222222] ${
                         errors.country_id ? "border-red-500" : "border-gray-300"
                       } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                     >
@@ -686,7 +686,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   >
                     <label
                       htmlFor="controller_id"
-                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
                     >
                       Controller <span className="text-red-500">*</span>
                     </label>
@@ -695,7 +695,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       name="controller_id"
                       value={formData.controller_id}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
+                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-600 dark:bg-[#222222] ${
                         errors.controller_id
                           ? "border-red-500"
                           : "border-gray-300"
@@ -721,7 +721,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   >
                     <label
                       htmlFor="recruiter_id"
-                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                      className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
                     >
                       Recruiter <span className="text-red-500">*</span>
                     </label>
@@ -730,7 +730,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       name="recruiter_id"
                       value={formData.recruiter_id}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
+                      className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-600 dark:bg-[#222222] ${
                         errors.recruiter_id
                           ? "border-red-500"
                           : "border-gray-300"
