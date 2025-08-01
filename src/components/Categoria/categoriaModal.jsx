@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import instance from "../../axios/axiosConfig";
 
-
 export default function ModalCrearCategoria({ open, onClose, onSuccess }) {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -28,7 +27,7 @@ export default function ModalCrearCategoria({ open, onClose, onSuccess }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+      className="fixed inset-0 bg-black/50 backdrop-blur-lg flex justify-center items-center z-50"
       onClick={onClose}
     >
       <div

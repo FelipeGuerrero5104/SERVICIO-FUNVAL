@@ -1,4 +1,3 @@
-// src/pages/Categorias.jsx
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useData } from "../Hooks/useData";
@@ -15,10 +14,21 @@ export default function Categorias() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
 
   if (loading)
-    return <p className="text-center mt-10">Cargando categorías...</p>;
+    return (
+      <div className="flex justify-center items-center min-h-[200px]">
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          Cargando categorías...
+        </p>
+      </div>
+    );
+
   if (error)
     return (
-      <p className="text-center text-red-500">Error al cargar categorías</p>
+      <div className="flex justify-center items-center min-h-[200px]">
+        <p className="text-lg text-red-500 dark:text-red-400">
+          Error al cargar categorías
+        </p>
+      </div>
     );
 
   const handleEditar = (categoria) => {
@@ -37,13 +47,17 @@ export default function Categorias() {
   };
 
   return (
-    <div className="lg:h-screen p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row gap-3 md:gap-0 justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Categorías</h1>
-        <div className="flex gap-2">
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto dark:bg-slate-900">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-[#ffb400]">
+          Categorías
+        </h1>
+
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           {user?.role?.name === "Admin" && (
             <button
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+              className="bg-[#1e88e5] hover:bg-[#12345a] text-white px-4 py-2 rounded-lg shadow-md transition-colors w-full sm:w-auto text-center"
               onClick={() => setModalCrearAbierto(true)}
             >
               Agregar categoría
@@ -53,46 +67,55 @@ export default function Categorias() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Grid de categorías */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         {categorias.map((categoria) => (
           <div
             key={categoria.id}
-            className="flex border border-gray-300 shadow-sm py-4 px-1 rounded bg-white hover:shadow-md transition"
+            className="flex flex-col sm:flex-row border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 bg-white dark:bg-[#1e1e1e] dark:border-gray-700"
           >
-            <img
-              src={`/ImagenesCategorias/${categoria.id}.jpg`}
-              className="h-30 w-30 mx-3 "
-              alt={`Imagen de ${categoria.id}`}
-            />
-            <div className="flex flex-col">
-              <h2 className="text-xl font-semibold mb-2">{categoria.name}</h2>
-              <p className="text-gray-600">
+            <div className="w-full h-40 sm:w-32 sm:h-auto sm:min-h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+              <img
+                src={`/ImagenesCategorias/${categoria.id}.jpg`}
+                className="w-full h-full object-cover"
+                alt={`Imagen de ${categoria.name}`}
+                onError={(e) => {
+                  e.target.src = "/placeholder-image.jpg";
+                  e.target.className = "w-full h-full object-contain p-4";
+                }}
+              />
+            </div>
+
+            <div className="flex-1 p-4 flex flex-col">
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+                {categoria.name}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 flex-1">
                 {categoria.description || "Sin descripción"}
               </p>
-              <div className="flex gap-3">
-                {user?.role?.name === "Admin" && (
+
+              {user?.role?.name === "Admin" && (
+                <div className="flex gap-2 mt-auto">
                   <button
                     onClick={() => handleEditar(categoria)}
-                    className="bg-blue-600 text-white px-2 py-1 rounded mt-2 cursor-pointer hover:bg-blue-700 "
+                    className="bg-[#1e88e5] hover:bg-[#12345a] text-white px-3 py-1 rounded text-sm transition-colors flex-1 text-center"
                   >
-                    {" "}
-                    Editar{" "}
+                    Editar
                   </button>
-                )}
-                {user?.role?.name === "Admin" && (
                   <button
                     onClick={() => handleDelete(categoria.id)}
-                    className="bg-red-800 text-white px-2 py-1 rounded mt-2 cursor-pointer hover:bg-red-900 "
+                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors flex-1 text-center"
                   >
-                    {" "}
-                    Eliminar{" "}
+                    Eliminar
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
+
+      {/* Modales */}
       <ModalCrearCategoria
         open={modalCrearAbierto}
         onClose={() => setModalCrearAbierto(false)}

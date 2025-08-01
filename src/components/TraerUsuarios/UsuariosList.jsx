@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import instance from "../../axios/axiosConfig";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom"; // Añadimos useNavigate
+import { useNavigate } from "react-router-dom";
 import UsuariosCard from "./UsuariosCard";
 import BotonHome from "../BotonHome";
 
 export default function ListaUsuarios() {
   const { user } = useAuth();
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,9 +31,11 @@ export default function ListaUsuarios() {
   if (user?.role?.name?.toLowerCase() !== "admin") return null;
 
   return (
-    <div className="bg-white p-6 rounded shadow-md">
+    <div className="bg-white p-6 rounded shadow-md dark:bg-slate-900">
       <div className="flex justify-between items-center mb-4 mx-5">
-        <h2 className="text-xl font-bold text-gray-800">Lista de Usuarios</h2>
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-[#ffb400]">
+          Lista de Usuarios
+        </h2>
         <div className="flex gap-5">
           <button
             onClick={() => navigate("/register")}
