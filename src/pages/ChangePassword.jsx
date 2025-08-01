@@ -29,9 +29,9 @@ const ChangePassword = () => {
       newErrors.current_password = "Ingresa tu contraseña actual.";
     if (!formData.new_password)
       newErrors.new_password = "Ingresa una nueva contraseña.";
-    else if (formData.new_password.length < 8)
+    else if (formData.new_password.length < 6)
       newErrors.new_password =
-        "La nueva contraseña debe tener al menos 8 caracteres.";
+        "La nueva contraseña debe tener al menos 6 caracteres.";
     if (formData.new_password !== formData.confirm_password)
       newErrors.confirm_password = "Las contraseñas no coinciden.";
     setErrors(newErrors);
@@ -52,7 +52,7 @@ const ChangePassword = () => {
     setLoading(true);
     try {
       const response = await instance.put("/auth/change-password", {
-        old_password: formData.current_password, // Cambiado a old_password
+        old_password: formData.current_password, 
         new_password: formData.new_password,
       });
       if (
@@ -74,7 +74,7 @@ const ChangePassword = () => {
         throw new Error("Respuesta inesperada del servidor.");
       }
     } catch (error) {
-      console.error("Error en ChangePassword:", error.response); // Para depuración
+      console.error("Error en ChangePassword:", error.response); 
       const status = error.response?.status;
       let errorMessage = "Error al cambiar la contraseña.";
       if (status === 400) {
