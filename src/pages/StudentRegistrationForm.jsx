@@ -33,7 +33,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   const [roleIdMap, setRoleIdMap] = useState({});
 
   useEffect(() => {
@@ -69,6 +68,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
             if (role.name === "Student") mapping[ROLES.STUDENT] = role.id;
           });
           setRoleIdMap(mapping);
+          console.log("roleIdMap:", mapping); // Depuración
         } else {
           console.error("Error fetching roles:", rolesResponse.status);
           setRoleIdMap({
@@ -96,9 +96,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
         try {
           const controllersResponse = await fetch(
             `${API_BASE_URL}/users?r=${controllerRoleId}`,
-            {
-              credentials: "include",
-            }
+            { credentials: "include" }
           );
           if (controllersResponse.ok) {
             const controllersData = await controllersResponse.json();
@@ -113,9 +111,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
         try {
           const recruitersResponse = await fetch(
             `${API_BASE_URL}/users?r=${recruiterRoleId}`,
-            {
-              credentials: "include",
-            }
+            { credentials: "include" }
           );
           if (recruitersResponse.ok) {
             const recruitersData = await recruitersResponse.json();
@@ -179,6 +175,11 @@ const StudentRegistrationForm = ({ currentUserId }) => {
           role: value,
           controller_id: "",
           recruiter_id: "",
+        }));
+      } else if (value === ROLES.STUDENT) {
+        setFormData((prev) => ({
+          ...prev,
+          role: value,
         }));
       }
     }
@@ -254,115 +255,128 @@ const StudentRegistrationForm = ({ currentUserId }) => {
     e.preventDefault();
     setSubmissionMessage({ type: "", text: "" });
 
-    if (validateForm()) {
-      if (!roleIdMap[formData.role]) {
-        setSubmissionMessage({
-          type: "error",
-          text: "Error: No se pudo obtener el ID del rol. Por favor, recarga la página.",
-        });
-        return;
-      }
-
-      const userData = {
-        f_name: formData.f_name,
-        m_name: formData.m_name || "",
-        f_lastname: formData.f_lastname,
-        s_lastname: formData.s_lastname || "",
-        email: formData.email,
-        password: formData.password,
-        role_id: roleIdMap[formData.role],
-      };
-
-      if (
-        formData.role === ROLES.CONTROLLER ||
-        formData.role === ROLES.RECRUITER ||
-        formData.role === ROLES.STUDENT
-      ) {
-        userData.schools = [parseInt(formData.school_id)];
-        userData.country_id = parseInt(formData.country_id);
-      }
-
-      if (formData.role === ROLES.STUDENT) {
-        userData.controller_id = parseInt(formData.controller_id);
-        userData.recruiter_id = parseInt(formData.recruiter_id);
-      }
-
-      try {
-        const response = await fetch(`${API_BASE_URL}/users/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(userData),
-        });
-
-        if (response.ok) {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const data = await response.json();
-            setSubmissionMessage({
-              type: "success",
-              text: "¡Usuario registrado exitosamente!",
-            });
-          } else {
-            setSubmissionMessage({
-              type: "success",
-              text: "¡Usuario registrado exitosamente! (Sin contenido de respuesta JSON)",
-            });
-          }
-          setFormData({
-            f_name: "",
-            m_name: "",
-            f_lastname: "",
-            s_lastname: "",
-            email: "",
-            password: "",
-            role: "",
-            school_id: "",
-            country_id: "",
-            controller_id: "",
-            recruiter_id: "",
-            status: "active",
-          });
-          setErrors({});
-        } else {
-          let errorMessage = `Error en el registro: ${response.status} - ${response.statusText}`;
-          try {
-            const errorData = await response.json();
-            errorMessage = `Error en el registro: ${response.status} - ${
-              errorData.message || errorData.detail || JSON.stringify(errorData)
-            }`;
-          } catch (parseError) {
-            const errorText = await response.text();
-            console.error(
-              "La respuesta de error no es JSON o está vacía:",
-              errorText
-            );
-          }
-          setSubmissionMessage({ type: "error", text: errorMessage });
-        }
-      } catch (error) {
-        setSubmissionMessage({
-          type: "error",
-          text: `Error de red o del servidor: ${error.message}`,
-        });
-      }
-    } else {
+    if (!validateForm()) {
       setSubmissionMessage({
         type: "error",
         text: "Por favor, corrige los errores en el formulario.",
       });
+      return;
+    }
+
+    if (!roleIdMap[formData.role]) {
+      setSubmissionMessage({
+        type: "error",
+        text: `Error: No se pudo obtener el ID del rol para ${formData.role}. Por favor, recarga la página.`,
+      });
+      console.error("roleIdMap missing for role:", formData.role, roleIdMap);
+      return;
+    }
+
+    const userData = {
+      f_name: formData.f_name,
+      m_name: formData.m_name || "",
+      f_lastname: formData.f_lastname,
+      s_lastname: formData.s_lastname || "",
+      email: formData.email,
+      password: formData.password,
+      role_id: roleIdMap[formData.role],
+      status: formData.status,
+      schools: [], // Siempre incluir schools, incluso vacío, para cumplir con el backend
+    };
+
+    // Incluir schools y country_id solo si son necesarios
+    if (
+      formData.role === ROLES.CONTROLLER ||
+      formData.role === ROLES.RECRUITER ||
+      formData.role === ROLES.STUDENT
+    ) {
+      if (formData.school_id) {
+        userData.schools = [parseInt(formData.school_id)];
+      }
+      if (formData.country_id) {
+        userData.country_id = parseInt(formData.country_id);
+      }
+    }
+
+    if (formData.role === ROLES.STUDENT) {
+      if (formData.controller_id) {
+        userData.controller_id = parseInt(formData.controller_id);
+      }
+      if (formData.recruiter_id) {
+        userData.recruiter_id = parseInt(formData.recruiter_id);
+      }
+    }
+
+    console.log("Submitting userData:", userData); // Depuración
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          setSubmissionMessage({
+            type: "success",
+            text: `Usuario registrado exitosamente: ${data.email}`,
+          });
+        } else {
+          setSubmissionMessage({
+            type: "success",
+            text: "Usuario registrado exitosamente (sin contenido JSON).",
+          });
+        }
+        setFormData({
+          f_name: "",
+          m_name: "",
+          f_lastname: "",
+          s_lastname: "",
+          email: "",
+          password: "",
+          role: "",
+          school_id: "",
+          country_id: "",
+          controller_id: "",
+          recruiter_id: "",
+          status: "active",
+        });
+        setErrors({});
+      } else {
+        let errorMessage = `Error en el registro: ${response.status} - ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = `Error en el registro: ${response.status} - ${
+            errorData.message || errorData.detail || JSON.stringify(errorData)
+          }`;
+        } catch (parseError) {
+          const errorText = await response.text();
+          console.error("Error response:", errorText);
+        }
+        setSubmissionMessage({ type: "error", text: errorMessage });
+      }
+    } catch (error) {
+      setSubmissionMessage({
+        type: "error",
+        text: `Error de red o del servidor: ${error.message}`,
+      });
+      console.error("Network error:", error);
     }
   };
 
   return (
-    <div className="flex justify-center items-start min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-gray-100 font-poppins text-gray-800 dark:bg-slate-900 ">
+    <div className="flex justify-center items-start min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-gray-100 font-poppins text-gray-800 dark:bg-slate-900">
       <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-full lg:max-w-4xl w-full my-5 dark:bg-[#2b2b2b]">
-        <div className="  sm:mt-0 mb-6 sm:mb-8">
+        <div className="sm:mt-0 mb-6 sm:mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="absolute mt-2 p-2 px-2 sm:p-4 sm:mt-6   rounded transform -translate-y-1/2 text-white bg-green-600 text-lg hover:text-gray-300 flex items-center gap-1"
+            className="absolute mt-2 p-2 px-2 sm:p-4 sm:mt-6 rounded transform -translate-y-1/2 text-white bg-green-600 text-lg hover:text-gray-300 flex items-center gap-1"
             title="Volver al inicio"
           >
             <FaArrowLeft />
@@ -401,7 +415,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:bg-[#222222]`}
-
                 >
                   <option value="">Selecciona un rol</option>
                   <option value={ROLES.ADMIN}>Administrador</option>
@@ -418,7 +431,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
             </div>
             <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0 dark:border-gray-700">
               <h2 className="dark:text-[#1e88e5] mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300 dark:border-gray-700">
-
                 Información Personal
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -429,8 +441,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                 >
                   <label
                     htmlFor="f_name"
-                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300 "
-
+                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
                   >
                     Primer Nombre <span className="text-red-500">*</span>
                   </label>
@@ -446,7 +457,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                         ? "border-red-500"
                         : "border-gray-300 dark:border-gray-600"
                     } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:bg-[#222222]`}
-
                   />
                   {errors.f_name && (
                     <span className="text-red-600 text-xs sm:text-sm mt-1 block">
@@ -458,7 +468,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   <label
                     htmlFor="m_name"
                     className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
-
                   >
                     Segundo Nombre (opcional)
                   </label>
@@ -470,7 +479,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     onChange={handleChange}
                     placeholder="Ej: Carlos"
                     className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:text-gray-400 dark:bg-[#222222]"
-
                   />
                 </div>
                 <div
@@ -481,7 +489,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   <label
                     htmlFor="f_lastname"
                     className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
-
                   >
                     Primer Apellido <span className="text-red-500">*</span>
                   </label>
@@ -496,8 +503,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                       errors.f_lastname
                         ? "border-red-500"
                         : "border-gray-300 dark:border-gray-600"
-
-
                     } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                   />
                   {errors.f_lastname && (
@@ -510,7 +515,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   <label
                     htmlFor="s_lastname"
                     className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
-
                   >
                     Segundo Apellido (opcional)
                   </label>
@@ -522,20 +526,17 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     onChange={handleChange}
                     placeholder="Ej: García"
                     className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:text-gray-400 dark:bg-[#222222]"
-
                   />
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
-
               <div
                 className={`mb-2 md:mb-0 ${errors.email ? "text-red-600" : ""}`}
               >
                 <label
                   htmlFor="email"
                   className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
-
                 >
                   Correo Electrónico <span className="text-red-500">*</span>
                 </label>
@@ -550,7 +551,6 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     errors.email
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
-
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                 />
                 {errors.email && (
@@ -566,9 +566,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
               >
                 <label
                   htmlFor="password"
-
                   className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
-
                 >
                   Contraseña <span className="text-red-500">*</span>
                 </label>
@@ -579,12 +577,10 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Contraseña del usuario"
-
                   className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-400 dark:bg-[#222222] ${
                     errors.password
                       ? "border-red-500"
                       : "border-gray-300 dark:border-gray-600"
-
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                 />
                 {errors.password && (
@@ -756,9 +752,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
             <div className="text-center mt-6 sm:mt-8">
               <button
                 type="submit"
-
                 className="bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] hover:text-[#ffb400] text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-
               >
                 Registrar Usuario
               </button>
