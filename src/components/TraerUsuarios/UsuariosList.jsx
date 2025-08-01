@@ -71,7 +71,7 @@ export default function ListaUsuarios() {
         <div className="flex gap-25 sm:gap-5">
           <button
             onClick={() => navigate("/register")}
-            className="bg-blue-600 hover:bg-blue-800 text-white font-bold px-2 sm:py-2 sm:px-4 rounded-lg shadow transition duration-300 ease-in-out"
+            className="bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white font-bold px-2 sm:py-2 sm:px-4 rounded-lg shadow transition duration-300 ease-in-out"
           >
             Crear Usuario
           </button>
@@ -102,18 +102,7 @@ export default function ListaUsuarios() {
           ))}
         </select>
 
-        <select
-          value={escuelaFiltro}
-          onChange={(e) => setEscuelaFiltro(e.target.value)}
-          className="border rounded px-3 py-2 dark:bg-slate-800 dark:text-white"
-        >
-          <option value="todos">Todas las Escuelas</option>
-          {escuelasUnicas.map((escuela) => (
-            <option key={escuela} value={escuela}>
-              {escuela.charAt(0).toUpperCase() + escuela.slice(1)}
-            </option>
-          ))}
-        </select>
+
       </div>
 
       {/* Lista */}

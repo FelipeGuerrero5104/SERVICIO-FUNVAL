@@ -148,7 +148,7 @@ const PerfilUsuario = () => {
               <button
                 onClick={handleProfilePictureUpload}
                 disabled={uploading || !profilePicture}
-                className="mt-3 flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition disabled:opacity-50"
+                className="mt-3 flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-green-600 to-green-800 text-white rounded-md text-sm hover:bg-gradient-to-br hover:from-green-700 hover:to-green-900 transition disabled:opacity-50"
               >
                 <HiArrowUp className="h-5 w-5" />
                 {uploading ? "Subiendo..." : "Actualizar Foto"}
@@ -178,13 +178,13 @@ const PerfilUsuario = () => {
               <div className="col-span-1 sm:col-span-2 flex justify-center gap-4 mt-4">
                 <button
                   onClick={() => navigate("/change-password")}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition"
+                  className="px-4 py-2 bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white rounded-md text-sm transition"
                 >
                   Cambiar Contraseña
                 </button>
                 <button
                   onClick={() => navigate("/update-profile")}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition"
+                  className="px-4 py-2 bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white rounded-md text-sm  transition"
                 >
                   Modificar Datos
                 </button>
