@@ -8,6 +8,7 @@ export default function UsuariosCard({ id, full_name, email, phone, role }) {
       <p className="text-sm text-gray-600 dark:text-gray-400">{email}</p>
       <p className="text-sm text-gray-600 dark:text-gray-400">{phone}</p>
       <p className="text-sm text-gray-600 dark:text-gray-400">Rol: {role}</p>
+      
       <Link
         to={`/usuarios/${id}`}
         className="mt-2 inline-block bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white px-4 py-1 rounded transition duration-300 ease-in-out"
