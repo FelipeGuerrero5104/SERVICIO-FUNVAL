@@ -8,7 +8,7 @@ export default function LandingPage() {
         <div>
           <button
             onClick={() => navigate("/login")}
-            className="mr-5 bg-[#2c7ee2] hover:bg-[#023866] transition-colors text-white font-bold py-1 px-4 md:py-3 md:px-12 rounded-lg cursor-pointer"
+            className="mr-5 bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] transition-colors text-white font-bold py-1 px-4 md:py-3 md:px-12 rounded-lg cursor-pointer"
           >
             Login
           </button>
