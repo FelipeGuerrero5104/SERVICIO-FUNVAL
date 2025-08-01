@@ -359,15 +359,15 @@ const StudentRegistrationForm = ({ currentUserId }) => {
   return (
     <div className="flex justify-center items-start min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-gray-100 font-poppins text-gray-800 dark:bg-slate-900 ">
       <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-full lg:max-w-4xl w-full my-5 dark:bg-[#2b2b2b]">
-        <div className="mb-6 sm:mb-8">
+        <div className="  sm:mt-0 mb-6 sm:mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="absolute mt-6 p-2 px-4 rounded transform -translate-y-1/2 text-white bg-green-600 text-lg hover:text-gray-300 flex items-center gap-1"
+            className="absolute mt-2 p-2 px-2 sm:p-4 sm:mt-6   rounded transform -translate-y-1/2 text-white bg-green-600 text-lg hover:text-gray-300 flex items-center gap-1"
             title="Volver al inicio"
           >
             <FaArrowLeft />
           </button>
-          <h1 className="text-green-600 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center dark:text-[#ffb400]">
+          <h1 className="text-green-600 pt-10 sm:pt-0 text-xl sm:text-3xl lg:text-4xl font-extrabold text-end md:text-center dark:text-[#ffb400]">
             Registrar Nuevo Usuario
           </h1>
         </div>
