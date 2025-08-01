@@ -78,12 +78,16 @@ export default function ServicesList() {
   });
 
   if (loading)
-    return <div className="text-center py-4">Cargando servicios...</div>;
+    return (
+      <div className="text-center py-4 dark:text-gray-300">
+        Cargando servicios...
+      </div>
+    );
 
   return (
     <div className="space-y-6">
       <div className="md:flex justify-between">
-        <h1 className="text-center text-3xl font-bold text-gray-800">
+        <h1 className="text-center text-3xl font-bold text-gray-800 dark:text-[#ffb400]">
           Gestión de Servicios
         </h1>
         <div className="hidden md:block">
@@ -94,18 +98,26 @@ export default function ServicesList() {
       <div className="flex justify-center md:hidden">
         <BotonHome />
       </div>
-      <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-lg font-semibold mb-3">Filtros</h2>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="bg-white p-4 rounded-lg shadow-md dark:bg-[#2b2b2b]">
+        <h2 className="text-lg font-semibold mb-3 dark:text-white">Filtros</h2>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 ">
           <select
             value={filters.status}
             onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-            className="border rounded px-3 py-2"
+            className="border rounded px-3 py-2 dark:text-white dark:focus:bg-[#1e1e1f] "
           >
-            <option value="">Todos los estados</option>
-            <option value="pending">Pendiente</option>
-            <option value="approved">Aprobado</option>
-            <option value="rejected">Rechazado</option>
+            <option className="dark:bg-[#12345a]" value="">
+              Todos los estados
+            </option>
+            <option className="dark:bg-[#12345a]" value="pending">
+              Pendiente
+            </option>
+            <option className="dark:bg-[#12345a]" value="approved">
+              Aprobado
+            </option>
+            <option className="dark:bg-[#12345a]" value="rejected">
+              Rechazado
+            </option>
           </select>
 
           <select
@@ -113,7 +125,7 @@ export default function ServicesList() {
             onChange={(e) =>
               setFilters({ ...filters, category: e.target.value })
             }
-            className="border rounded px-3 py-2"
+            className="border rounded px-3 py-2 dark:text-white dark:focus:bg-[#1e1e1f]"
           >
             <option value="">Todas las categorías</option>
             {categories.map((cat) => (
@@ -130,7 +142,7 @@ export default function ServicesList() {
             onChange={(e) =>
               setFilters({ ...filters, student: e.target.value })
             }
-            className="border rounded px-3 py-2"
+            className="border rounded px-3 py-2 dark:text-white dark:focus:bg-[#1e1e1f]"
           />
 
           <input
@@ -139,21 +151,21 @@ export default function ServicesList() {
             onChange={(e) =>
               setFilters({ ...filters, dateFrom: e.target.value })
             }
-            className="border rounded px-3 py-2"
+            className="border rounded px-3 py-2 dark:text-white dark:focus:bg-[#1e1e1f]"
           />
 
           <input
             type="date"
             value={filters.dateTo}
             onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
-            className="border rounded px-3 py-2"
+            className="border rounded px-3 py-2 dark:text-white dark:focus:bg-[#1e1e1f]"
           />
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md">
-          <thead className="bg-[#023866] text-white">
+      <div className="overflow-x-auto rounded-2xl">
+        <table className="min-w-full bg-white rounded-2xl shadow-md dark:bg-[#2b2b2b]">
+          <thead className="bg-gradient-to-br from-[#0d47a1] to-[#12345a] text-white">
             <tr>
               <th className="py-3 px-4 text-left">Estudiante</th>
               <th className="py-3 px-4 text-left">Categoría</th>
@@ -163,7 +175,7 @@ export default function ServicesList() {
               <th className="py-3 px-4 text-left">Detalle</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:text-white">
             {filteredServices.map((service) => (
               <ServiceCard
                 key={service.id}

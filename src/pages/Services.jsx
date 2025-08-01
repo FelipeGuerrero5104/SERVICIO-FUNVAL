@@ -7,8 +7,8 @@ export default function Services() {
   const isAdmin = user?.role?.name?.toLowerCase() === "admin";
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <main className="p-6 max-w-7xl mx-auto mt-10">
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-900 ">
+      <main className="p-6 max-w-7xl mx-auto pt-10">
         {isAdmin ? <ServicesList /> : <UserServices />}
       </main>
     </div>

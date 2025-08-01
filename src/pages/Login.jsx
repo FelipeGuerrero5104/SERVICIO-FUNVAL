@@ -52,7 +52,10 @@ export default function Login() {
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Correo electrónico
             </label>
             <input
@@ -67,7 +70,10 @@ export default function Login() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Contraseña
             </label>
             <input
@@ -84,7 +90,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center items-center bg-[#2c7ee2] hover:bg-[#023866] text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2c7ee2] focus:ring-opacity-75"
+            className="w-full flex justify-center items-center bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2c7ee2] focus:ring-opacity-75"
           >
             {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>
@@ -92,7 +98,10 @@ export default function Login() {
 
         <p className="mt-6 text-center text-sm text-gray-600">
           ¿No tienes una cuenta?{" "}
-          <a href="/register" className="text-[#023866] font-medium hover:underline">
+          <a
+            href="/register"
+            className="text-[#023866] font-medium hover:underline"
+          >
             Regístrate aquí
           </a>
         </p>
