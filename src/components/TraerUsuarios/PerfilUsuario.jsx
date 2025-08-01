@@ -23,18 +23,24 @@ const PerfilUsuario = () => {
     user?.s_lastname,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   const userInfo = [
-    { label: 'Nombre Completo', value: fullName || 'No disponible' },
-    { label: 'Correo Electrónico', value: user?.email || 'No disponible' },
-    { label: 'Teléfono', value: user?.phone || 'No disponible' },
-    { label: 'Rol', value: user?.role?.name || 'No disponible' },
-    { label: 'ID de Usuario', value: user?.id || 'No disponible' },
-    ...(user?.role?.name === 'Student'
-      ? [{ label: 'Escuela', value: user?.school?.name || 'No asignada. Actualiza tu perfil.' }]
+
+    ...(user?.role?.name === "Student"
+      ? [
+          {
+            label: "Escuela",
+            value: user?.schools?.[0]?.name || "No asignada. Actualiza tu perfil.",
+          },
+        ]
       : []),
-    { label: "Curso Estudiando", value: user?.course || "No especificado" },
+    { label: "Rol", value: user?.role?.name || "No disponible" },
+    { label: "ID de Usuario", value: user?.id || "No disponible" },
+    { label: "Nombre Completo", value: fullName || "No disponible" },
+    { label: "Correo Electrónico", value: user?.email || "No disponible" },
+    { label: "Teléfono", value: user?.phone || "No disponible" },
+ 
   ];
 
   const handleProfilePictureChange = (e) => {
@@ -106,10 +112,10 @@ const PerfilUsuario = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start px-4 py-8 sm:px-6 lg:px-8 dark:bg-slate-900 md:pt-20">
       <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
-        <div className="w-full lg:w-1/3 bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="bg-gradient-to-br from-blue-800 to-blue-900 h-24 relative flex items-center justify-center">
+        <div className="w-full lg:w-1/3 bg-white shadow-xl rounded-lg overflow-hidden dark:bg-[#2b2b2b] ">
+          <div className="bg-gradient-to-br from-[#0d47a1] to-[#082342] h-24 relative flex items-center justify-center">
             <button
               onClick={() => navigate("/home")}
               className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl hover:text-gray-300"
@@ -127,9 +133,9 @@ const PerfilUsuario = () => {
                 "https://placehold.co/150"
               }
               alt="Foto de perfil"
-              className="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover"
+              className="w-32 h-32 rounded-full border-4 border-white shadow-xl object-cover "
             />
-            <h3 className="mt-4 text-lg font-semibold text-gray-800 text-center">
+            <h3 className="mt-4 text-lg font-semibold text-gray-800 text-center dark:text-[#ffb400]">
               {fullName}
             </h3>
             <div className="mt-6 w-full flex flex-col items-center">
@@ -137,7 +143,7 @@ const PerfilUsuario = () => {
                 type="file"
                 accept="image/jpeg,image/png"
                 onChange={handleProfilePictureChange}
-                className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100  dark:text-gray-400 dark:file:text-[#1e88e5] dark:file:font-bold dark:file:bg-[#2b2b2b]"
               />
               <button
                 onClick={handleProfilePictureUpload}
@@ -151,21 +157,39 @@ const PerfilUsuario = () => {
           </div>
         </div>
 
-        <div className="w-full lg:w-2/3 bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="bg-gradient-to-br from-blue-800 to-blue-900 h-24 flex items-center justify-center">
+        <div className="w-full lg:w-2/3 bg-white shadow-xl rounded-lg overflow-hidden dark:bg-[#2b2b2b] ">
+          <div className="bg-gradient-to-br from-[#0d47a1] to-[#082342] h-24 flex items-center justify-center">
             <h2 className="text-white text-xl font-bold">
               Información Personal
             </h2>
           </div>
-          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6 ">
             {userInfo.map(({ label, value }) => (
               <div key={label} className="flex flex-col">
-                <span className="text-sm font-semibold text-gray-600 mb-1">
+                <span className="text-sm font-semibold text-gray-600 mb-1 dark:text-white">
                   {label}
                 </span>
-                <span className="text-base text-gray-800">{value}</span>
+                <span className="text-base text-gray-800 dark:text-gray-400">
+                  {value}
+                </span>
               </div>
             ))}
+            {user?.role?.name === "Admin" && (
+              <div className="col-span-1 sm:col-span-2 flex justify-center gap-4 mt-4">
+                <button
+                  onClick={() => navigate("/change-password")}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition"
+                >
+                  Cambiar Contraseña
+                </button>
+                <button
+                  onClick={() => navigate("/update-profile")}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition"
+                >
+                  Modificar Datos
+                </button>
+              </div>
+            )}
           </div>
           {submissionMessage.text && (
             <div className="p-6">

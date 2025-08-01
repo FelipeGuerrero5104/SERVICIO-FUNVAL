@@ -1,18 +1,30 @@
-import { FaFacebook, FaYoutube, FaInstagram, FaApple, FaGooglePlay } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaYoutube,
+  FaInstagram,
+  FaApple,
+  FaGooglePlay,
+} from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <div className="bg-neutral-800 p-10 flex justify-between mt-20">
-      <div>
-        <div className="flex flex-col gap-3">
-          <h3 className="text-white text-sm">Contact us</h3>
-          <div className="flex gap-3">
-            <a href="https://www.fundaciondevalores.org/" target="_blank" rel="noopener noreferrer">
+    <div className="bg-neutral-800 p-6 md:p-10 flex flex-col md:flex-row justify-between gap-8 md:gap-0  dark:bg-[#121212] dark:border-gray-800">
+      {/* Columna 1 - Contacto */}
+      <div className="flex flex-col items-center md:items-start gap-4">
+        <h3 className="text-white text-sm font-medium">Contact us</h3>
+        <div className="flex gap-3">
+          <a
+            href="https://www.fundaciondevalores.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:scale-105 transition-transform"
+          >
+            <div className="rounded-lg bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white p-2 w-8 h-8 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="rounded-lg bg-blue-800 text-white p-2 size-8"
+                className="w-5 h-5"
               >
                 <path
                   fillRule="evenodd"
@@ -20,13 +32,18 @@ export default function Footer() {
                   clipRule="evenodd"
                 />
               </svg>
-            </a>
-            <a href="tel:+5022055151393">
+            </div>
+          </a>
+          <a
+            href="tel:+5022055151393"
+            className="hover:scale-105 transition-transform"
+          >
+            <div className="rounded-lg bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white p-2 w-8 h-8 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="size-8 text-white rounded-lg bg-blue-800 p-2"
+                className="w-5 h-5"
               >
                 <path
                   fillRule="evenodd"
@@ -34,76 +51,99 @@ export default function Footer() {
                   clipRule="evenodd"
                 />
               </svg>
-            </a>
-          </div>
+            </div>
+          </a>
         </div>
-        <div className="mt-5">
-          <h3 className="text-white text-sm">Follow us</h3>
-          <div className="flex gap-3">
+
+        <div className="mt-2">
+          <h3 className="text-white text-sm font-medium text-center md:text-left">
+            Follow us
+          </h3>
+          <div className="flex gap-3 justify-center md:justify-start mt-2">
             <a
               href="https://www.facebook.com/fundet"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
+              className="text-[#1e88e5] hover:text-[#12345a] dark:hover:text-[#ffb400] transition-colors hover:scale-120 "
             >
-              <FaFacebook className="size-6" />
+              <FaFacebook className="w-5 h-5" />
             </a>
             <a
               href="https://www.youtube.com/channel/UC3mlp-KW6mSDrsfsp8OOlIQ"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-600 hover:text-red-800 transition-colors"
+              className="text-[#ff0000] hover:text-[#cc0000] dark:hover:text-[#ffb400] transition-colors hover:scale-120"
             >
-              <FaYoutube className="size-6" />
+              <FaYoutube className="w-5 h-5" />
             </a>
             <a
               href="https://www.instagram.com/funvalinternacional?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
               target="_blank"
               rel="noopener noreferrer"
-              className="text-pink-500 hover:text-pink-700 transition-colors"
+              className="text-[#e1306c] hover:text-[#c13584] dark:hover:text-[#ffb400] transition-colors hover:scale-120"
             >
-              <FaInstagram className="size-6" />
+              <FaInstagram className="w-5 h-5" />
             </a>
           </div>
         </div>
       </div>
-      <div>
-        <a href="https://forms.monday.com/forms/cd0d06a41c4dc554d4f8681df147227f?r=use1" target="_blank" rel="noopener noreferrer">
-          <p className="text-white border border-white rounded-lg text-sm w-[170px] h-[30px] flex items-center justify-center">
-            O Contact site support
+
+      {/* Columna 2 - Enlaces */}
+      <div className="flex flex-col items-center md:items-start gap-4">
+        <a
+          href="https://forms.monday.com/forms/cd0d06a41c4dc554d4f8681df147227f?r=use1"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full flex justify-center md:block"
+        >
+          <p className="text-white border border-white rounded-lg text-sm w-[170px] h-[30px] flex items-center justify-center hover:bg-white/10 transition-colors">
+            Contact site support
           </p>
         </a>
-        <div className="flex flex-col items-center justify-center mt-10">
-          <p className="text-white">Data retention summary</p>
-          <p className="text-white">Get the mobile app</p>
-          <p className="text-white">Reset user tour on this page</p>
+        <div className="flex flex-col items-center md:items-start gap-1 text-sm">
+          <a
+            href="#"
+            className="text-white hover:text-[#ffb400] transition-colors"
+          >
+            Data retention summary
+          </a>
+          <a
+            href="#"
+            className="text-white hover:text-[#ffb400] transition-colors"
+          >
+            Get the mobile app
+          </a>
+          <a
+            href="#"
+            className="text-white hover:text-[#ffb400] transition-colors"
+          >
+            Reset user tour
+          </a>
         </div>
       </div>
-      <div>
-        <h3 className="text-white text-sm">Get mobile app</h3>
-        <div className="flex flex-col gap-4 text-white mt-2">
-          <div className="border border-white rounded w-[130px] h-[30px]">
-            <a
-              href="https://play.google.com/store/apps/details?id=com.moodle.moodlemobile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 hover:text-gray-300"
-            >
-              <FaGooglePlay className="text-2xl" />
-              <span>Google Play</span>
-            </a>
-          </div>
-          <div className="border border-white rounded w-[130px] h-[30px]">
-            <a
-              href="https://apps.apple.com/us/app/moodle/id633359593"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 hover:text-gray-300"
-            >
-              <FaApple className="text-2xl" />
-              <p className="text-xl">App Store</p>
-            </a>
-          </div>
+
+      {/* Columna 3 - Apps móviles */}
+      <div className="flex flex-col items-center md:items-start gap-4">
+        <h3 className="text-white text-sm font-medium">Get mobile app</h3>
+        <div className="flex flex-col gap-3">
+          <a
+            href="https://play.google.com/store/apps/details?id=com.moodle.moodlemobile"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 border border-white rounded px-3 py-1 w-[140px] hover:bg-white/10 transition-colors"
+          >
+            <FaGooglePlay className="text-lg text-white" />
+            <span className="text-white text-sm">Google Play</span>
+          </a>
+          <a
+            href="https://apps.apple.com/us/app/moodle/id633359593"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 border border-white rounded px-3 py-1 w-[140px] hover:bg-white/10 transition-colors"
+          >
+            <FaApple className="text-lg text-white" />
+            <span className="text-white text-sm">App Store</span>
+          </a>
         </div>
       </div>
     </div>

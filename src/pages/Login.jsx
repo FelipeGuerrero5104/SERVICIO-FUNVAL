@@ -96,7 +96,9 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center items-center bg-[#2c7ee2] hover:bg-[#023866] text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2c7ee2] focus:ring-opacity-75 disabled:opacity-50"
+
+            className="w-full flex justify-center items-center bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2c7ee2] focus:ring-opacity-75"
+
           >
             {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>

@@ -123,9 +123,9 @@ export default function Schools() {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="lg:h-screen p-6 max-w-7xl mx-auto">
+    <div className="lg:h-screen p-6 w-full md:px-[10%] mx-auto dark:bg-slate-900">
       <div className="flex flex-col md:flex-row gap-3 md:gap-0 justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Escuelas</h1>
+        <h1 className="text-3xl font-bold dark:text-[#ffb400]">Escuelas</h1>
         {(user?.role?.name === "Admin" ||
           user?.role?.name === "Controller") && (
           <div className="flex gap-4">
@@ -135,20 +135,23 @@ export default function Schools() {
             >
               Crear escuela
             </button>
-            <BotonHome/>
+            <BotonHome />
           </div>
         )}
       </div>
 
       {/* Formulario para crear/editar */}
       {(isCreating || isEditing) && (
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">
+        <div className="mb-6 p-4 bg-gray-50 rounded-lg dark:bg-[#2b2b2b]">
+          <h2 className="text-xl font-semibold mb-4 dark:text-[#1e88e5]">
             {isCreating ? "Crear Nueva Escuela" : "Editar Escuela"}
           </h2>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="name">
+              <label
+                className="block text-gray-700 mb-2 dark:text-gray-300"
+                htmlFor="name"
+              >
                 Nombre
               </label>
               <input
@@ -157,12 +160,15 @@ export default function Schools() {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 border rounded dark:bg-[#222222] dark:text-white"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="duration">
+              <label
+                className="block text-gray-700 mb-2 dark:text-gray-300 "
+                htmlFor="duration"
+              >
                 Duración (meses)
               </label>
               <input
@@ -171,11 +177,14 @@ export default function Schools() {
                 name="duration"
                 value={formData.duration}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 border rounded dark:bg-[#222222] dark:text-white"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2" htmlFor="image">
+              <label
+                className="block text-gray-700 mb-2 dark:text-gray-300"
+                htmlFor="image"
+              >
                 Imagen
               </label>
               <input
@@ -184,7 +193,7 @@ export default function Schools() {
                 name="image"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 border rounded dark:bg-[#222222] dark:text-white"
               />
               {previewImage && (
                 <div className="mt-2">
@@ -209,7 +218,7 @@ export default function Schools() {
             <div className="flex gap-2">
               <button
                 type="submit"
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                className="bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white px-4 py-2 rounded "
               >
                 {isCreating ? "Crear" : "Actualizar"}
               </button>
@@ -232,8 +241,10 @@ export default function Schools() {
 
       {/* Vista de detalles */}
       {selectedSchool && !isEditing && (
-        <div className="mb-6 p-4 bg-white border rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-2">Detalle de la Escuela</h2>
+        <div className="mb-6 p-4 bg-white border rounded-lg shadow-sm dark:bg-[#2b2b2b]">
+          <h2 className="text-xl font-semibold mb-2 dark:text-[#1e88e5]">
+            Detalle de la Escuela
+          </h2>
           {selectedSchool.imageUrl && (
             <div className="mb-4 flex justify-center">
               <img
@@ -243,15 +254,17 @@ export default function Schools() {
               />
             </div>
           )}
-          <p>
-            <strong>ID:</strong> {selectedSchool.id}
+          <p className="dark:text-gray-400">
+            <strong className="dark:text-white">ID:</strong> {selectedSchool.id}
           </p>
-          <p>
-            <strong>Nombre:</strong> {selectedSchool.name}
+          <p className="dark:text-gray-400">
+            <strong className="dark:text-white">Nombre:</strong>{" "}
+            {selectedSchool.name}
           </p>
           {selectedSchool.duration && (
-            <p>
-              <strong>Duración:</strong> {selectedSchool.duration} meses
+            <p className="dark:text-gray-400">
+              <strong className="dark:text-white">Duración:</strong>{" "}
+              {selectedSchool.duration} meses
             </p>
           )}
 
@@ -260,13 +273,13 @@ export default function Schools() {
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handleEditClick}
-                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                className="bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white px-3 py-1 rounded "
               >
                 Editar
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                className="bg-gradient-to-br from-red-400 to-red-600 hover:bg-gradient-to-br hover:from-red-600 hover:to-red-700 text-white px-3 py-1 rounded "
               >
                 Eliminar
               </button>
@@ -282,14 +295,14 @@ export default function Schools() {
       )}
 
       {/* Lista de escuelas */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 ">
         {schools.map((school) => (
           <div
             key={school.id}
-            className="flex flex-col border border-gray-300 shadow-sm py-4 px-4 rounded bg-white hover:shadow-md transition"
+            className="flex flex-col border border-gray-300 shadow-sm py-4 px-4 rounded bg-white hover:shadow-md transition dark:bg-[#2b2b2b] dark:border-[#12345a]"
           >
             {school.imageUrl && (
-              <div className="mb-4 flex justify-center">
+              <div className="mb-4 flex justify-center ">
                 <img
                   src={school.imageUrl}
                   alt={school.name}
@@ -298,18 +311,18 @@ export default function Schools() {
               </div>
             )}
             <div className="flex-1">
-              <h2 className="text-xl font-semibold mb-2 text-center">
+              <h2 className="text-xl font-semibold mb-2 text-center dark:text-white">
                 {school.name}
               </h2>
               {school.duration && (
-                <p className="text-gray-600 text-center">
+                <p className="text-gray-600 text-center dark:text-gray-300">
                   Duración: {school.duration} meses
                 </p>
               )}
               <div className="mt-3 flex justify-center">
                 <button
                   onClick={() => handleDetailClick(school)}
-                  className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                  className="bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white px-3 py-1 rounded "
                 >
                   Detalle
                 </button>

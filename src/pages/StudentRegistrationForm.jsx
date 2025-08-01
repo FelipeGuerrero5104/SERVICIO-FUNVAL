@@ -357,8 +357,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
   };
 
   return (
-    <div className="flex justify-center items-start min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-gray-100 font-poppins text-gray-800">
-      <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-full lg:max-w-4xl w-full my-5">
+    <div className="flex justify-center items-start min-h-screen px-4 py-8 sm:px-6 lg:px-8 bg-gray-100 font-poppins text-gray-800 dark:bg-slate-900 ">
+      <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-full lg:max-w-4xl w-full my-5 dark:bg-[#2b2b2b]">
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => navigate(-1)}
@@ -367,7 +367,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
           >
             <FaArrowLeft />
           </button>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center">
+          <h1 className="text-green-600 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center dark:text-[#ffb400]">
             Registrar Nuevo Usuario
           </h1>
         </div>
@@ -378,8 +378,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
-              <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">
+            <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0 dark:border-gray-700">
+              <h2 className="dark:text-[#1e88e5] mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300 dark:border-gray-700">
                 Rol del Usuario
               </h2>
               <div
@@ -387,7 +387,7 @@ const StudentRegistrationForm = ({ currentUserId }) => {
               >
                 <label
                   htmlFor="role"
-                  className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                  className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
                 >
                   Rol <span className="text-red-500">*</span>
                 </label>
@@ -396,9 +396,12 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
-                    errors.role ? "border-red-500" : "border-gray-300"
-                  } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-500 ${
+                    errors.role
+                      ? "border-red-500"
+                      : "border-gray-300 dark:border-gray-600"
+                  } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:bg-[#222222]`}
+
                 >
                   <option value="">Selecciona un rol</option>
                   <option value={ROLES.ADMIN}>Administrador</option>
@@ -413,9 +416,9 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                 )}
               </div>
             </div>
+            <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0 dark:border-gray-700">
+              <h2 className="dark:text-[#1e88e5] mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300 dark:border-gray-700">
 
-            <div className="mb-8 pb-5 border-b border-gray-200 last:border-b-0 last:mb-0 last:pb-0">
-              <h2 className="text-blue-600 mb-5 text-xl sm:text-2xl font-semibold border-b-2 pb-2 border-gray-300">
                 Información Personal
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -426,7 +429,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                 >
                   <label
                     htmlFor="f_name"
-                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300 "
+
                   >
                     Primer Nombre <span className="text-red-500">*</span>
                   </label>
@@ -437,9 +441,12 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     value={formData.f_name}
                     onChange={handleChange}
                     placeholder="Ej: Juan"
-                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
-                      errors.f_name ? "border-red-500" : "border-gray-300"
-                    } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-400 ${
+                      errors.f_name
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-600"
+                    } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:bg-[#222222]`}
+
                   />
                   {errors.f_name && (
                     <span className="text-red-600 text-xs sm:text-sm mt-1 block">
@@ -450,7 +457,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                 <div className="mb-2 md:mb-0">
                   <label
                     htmlFor="m_name"
-                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                   >
                     Segundo Nombre (opcional)
                   </label>
@@ -461,7 +469,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     value={formData.m_name}
                     onChange={handleChange}
                     placeholder="Ej: Carlos"
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:text-gray-400 dark:bg-[#222222]"
+
                   />
                 </div>
                 <div
@@ -471,7 +480,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                 >
                   <label
                     htmlFor="f_lastname"
-                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                   >
                     Primer Apellido <span className="text-red-500">*</span>
                   </label>
@@ -482,8 +492,12 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     value={formData.f_lastname}
                     onChange={handleChange}
                     placeholder="Ej: Pérez"
-                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
-                      errors.f_lastname ? "border-red-500" : "border-gray-300"
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-400 dark:bg-[#222222] ${
+                      errors.f_lastname
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-600"
+
+
                     } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                   />
                   {errors.f_lastname && (
@@ -495,7 +509,8 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                 <div className="mb-2 md:mb-0">
                   <label
                     htmlFor="s_lastname"
-                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                    className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                   >
                     Segundo Apellido (opcional)
                   </label>
@@ -506,19 +521,21 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                     value={formData.s_lastname}
                     onChange={handleChange}
                     placeholder="Ej: García"
-                    className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out"
+                    className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out dark:text-gray-400 dark:bg-[#222222]"
+
                   />
                 </div>
               </div>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-8 pb-5 border-b border-gray-200">
               <div
                 className={`mb-2 md:mb-0 ${errors.email ? "text-red-600" : ""}`}
               >
                 <label
                   htmlFor="email"
-                  className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+                  className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                 >
                   Correo Electrónico <span className="text-red-500">*</span>
                 </label>
@@ -529,8 +546,11 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Ej: juan.perez@example.com"
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
-                    errors.email ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-400 dark:bg-[#222222] ${
+                    errors.email
+                      ? "border-red-500"
+                      : "border-gray-300 dark:border-gray-600"
+
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                 />
                 {errors.email && (
@@ -546,7 +566,9 @@ const StudentRegistrationForm = ({ currentUserId }) => {
               >
                 <label
                   htmlFor="password"
-                  className="block text-gray-700 text-sm sm:text-base font-semibold mb-2"
+
+                  className="block text-gray-700 text-sm sm:text-base font-semibold mb-2 dark:text-gray-300"
+
                 >
                   Contraseña <span className="text-red-500">*</span>
                 </label>
@@ -557,8 +579,12 @@ const StudentRegistrationForm = ({ currentUserId }) => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Contraseña del usuario"
-                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border ${
-                    errors.password ? "border-red-500" : "border-gray-300"
+
+                  className={`w-full px-3 py-2 sm:px-4 sm:py-3 border dark:text-gray-400 dark:bg-[#222222] ${
+                    errors.password
+                      ? "border-red-500"
+                      : "border-gray-300 dark:border-gray-600"
+
                   } rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out`}
                 />
                 {errors.password && (
@@ -730,7 +756,9 @@ const StudentRegistrationForm = ({ currentUserId }) => {
             <div className="text-center mt-6 sm:mt-8">
               <button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+
+                className="bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] hover:text-[#ffb400] text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+
               >
                 Registrar Usuario
               </button>

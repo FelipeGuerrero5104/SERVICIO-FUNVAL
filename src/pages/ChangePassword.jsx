@@ -92,23 +92,23 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4 py-8">
-      <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full">
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4 py-8 dark:bg-slate-900 ">
+      <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full dark:bg-[#121212] ">
         <button
           onClick={() => navigate("/home")}
-          className="bg-black p-1 mt-4 rounded-full text-white absolute transform -translate-y-1/2 text-2xl hover:text-gray-300"
+          className="bg-black p-1 mt-4 rounded-full text-white absolute transform -translate-y-1/2 text-2xl hover:text-gray-300  dark:bg-[#2b2b2b] hover:dark:bg-[#444444]"
           title="Volver"
         >
           <FaArrowLeft />
         </button>
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center dark:text-gray-300">
           Cambiar Contraseña
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="current_password"
-              className="block text-gray-700 font-semibold mb-2"
+              className="block text-gray-700 font-semibold mb-2 dark:text-gray-500"
             >
               Contraseña Actual
             </label>
@@ -118,7 +118,7 @@ const ChangePassword = () => {
               name="current_password"
               value={formData.current_password}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border ${
+              className={`w-full px-4 py-2 border dark:bg-[#1d1d1d] dark:text-white ${
                 errors.current_password ? "border-red-500" : "border-gray-300"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
@@ -131,7 +131,7 @@ const ChangePassword = () => {
           <div className="mb-4">
             <label
               htmlFor="new_password"
-              className="block text-gray-700 font-semibold mb-2"
+              className="block text-gray-700 font-semibold mb-2 dark:text-gray-500"
             >
               Nueva Contraseña
             </label>
@@ -141,7 +141,7 @@ const ChangePassword = () => {
               name="new_password"
               value={formData.new_password}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border ${
+              className={`w-full px-4 py-2 border dark:bg-[#1d1d1d] dark:text-white ${
                 errors.new_password ? "border-red-500" : "border-gray-300"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
@@ -152,7 +152,7 @@ const ChangePassword = () => {
           <div className="mb-6">
             <label
               htmlFor="confirm_password"
-              className="block text-gray-700 font-semibold mb-2"
+              className="block text-gray-700 font-semibold mb-2 dark:text-gray-500"
             >
               Confirmar Nueva Contraseña
             </label>
@@ -162,7 +162,7 @@ const ChangePassword = () => {
               name="confirm_password"
               value={formData.confirm_password}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border ${
+              className={`w-full px-4 py-2 border dark:bg-[#1d1d1d] dark:text-white ${
                 errors.confirm_password ? "border-red-500" : "border-gray-300"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
@@ -175,7 +175,7 @@ const ChangePassword = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-br from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-800 text-white font-bold py-2 rounded-lg transition disabled:opacity-50 cursor-pointer"
+            className="w-full bg-gradient-to-br from-[#2196f3] to-[#0d47a1] hover:bg-gradient-to-br hover:from-[#1e88e5] hover:to-[#12345a] text-white font-bold py-2 rounded-lg transition disabled:opacity-50 cursor-pointer"
           >
             {loading ? "Actualizando..." : "Cambiar Contraseña"}
           </button>
