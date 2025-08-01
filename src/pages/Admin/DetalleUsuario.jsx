@@ -53,7 +53,8 @@ export default function DetalleUsuario() {
   if (!usuario) return <p>No se encontró el usuario</p>;
 
   return (
-    <div className="p-6 max-w-xl mx-auto flex flex-col bg-white shadow-md rounded mt-10">
+    <div className="min-h-screen bg-white dark:bg-slate-900 py-10">
+    <div className="p-6  max-w-xl mx-auto flex flex-col bg-white shadow-md rounded mt-10 dark:bg-[#2b2b2b]">
       <button
         onClick={() => navigate(-1)}
         className="mb-4 px-2 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-800 cursor-pointer"
@@ -61,9 +62,9 @@ export default function DetalleUsuario() {
         Volver atrás
       </button>
 
-      <h2 className="text-2xl font-bold mb-2">{usuario.full_name}</h2>
+      <h2 className="text-2xl font-bold mb-2 dark:text-white">{usuario.full_name}</h2>
 
-      <div className="space-y-1 text-gray-700">
+      <div className="space-y-1 text-gray-700 dark:text-gray-400">
         <p>
           <strong>ID:</strong> {usuario.id}
         </p>
@@ -85,7 +86,7 @@ export default function DetalleUsuario() {
         <p>
           <strong>Rol:</strong> {usuario.role?.name}
         </p>
-        <p className="mb-1">
+        <p className="mb-1 ">
           <strong>Curso actual:</strong>{" "}
           {usuario.schools && usuario.schools.length > 0
             ? usuario.schools.map((curso) => curso.name).join(", ")
@@ -94,29 +95,30 @@ export default function DetalleUsuario() {
       </div>
 
       {user?.role?.name === "Admin" && (
-        <div className="mt-6">
-          <label className="block mb-2 font-semibold">Actualizar Curso:</label>
+        <div className="mt-6 dark:text-white">
+          <label className="block mb-2 font-semibold ">Actualizar Curso:</label>
           <select
             value={cursoId || ""}
             onChange={(e) => setCursoId(Number(e.target.value))}
-            className="border px-3 py-2 w-full mb-3 rounded"
+            className="border px-3 py-2 w-full mb-3 rounded "
           >
-            <option value="">Seleccionar curso</option>
-            {cursos.map((curso) => (
-              <option key={curso.id} value={curso.id}>
+            <option className="dark:text-black" value="">Seleccionar curso</option>
+            {cursos.map((curso) => (  
+              <option className="dark:text-black" key={curso.id} value={curso.id}>
                 {curso.name}
               </option>
             ))}
           </select>
           <button
             onClick={actualizarCurso}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded "
             disabled={!cursoId}
           >
             Guardar cambios
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 }
