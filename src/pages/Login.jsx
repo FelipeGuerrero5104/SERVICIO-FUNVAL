@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { FaGithub, FaArrowRight } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { RiShieldUserFill } from "react-icons/ri";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Login() {
@@ -25,7 +24,7 @@ export default function Login() {
   ];
 
   useEffect(() => {
-    // Cambio de fondo cada 8 segundos
+    // Cambio de fondo cada 5 segundos
     const interval = setInterval(() => {
       setActiveBackground((prev) => (prev + 1) % backgrounds.length);
     }, 5000);
@@ -208,13 +207,17 @@ export default function Login() {
               transition={{ delay: 0.2 }}
             >
               <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg">
-                  <RiShieldUserFill className="text-white text-2xl" />
+                <div className="w-64 h-15 rounded-lg overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg">
+                  <img
+                    src="/funvallogin.jpg"
+                    alt="Funval Logo"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <motion.div
-                  className="absolute -inset-2 border-2 border-blue-400 rounded-full opacity-0"
+                  className="absolute -inset-2 border-2 border-blue-400 rounded-lg opacity-0"
                   animate={{
-                    scale: [1, 1.2, 1],
+                    scale: [1, 1.1, 1],
                     opacity: [0, 0.5, 0],
                   }}
                   transition={{
@@ -226,13 +229,14 @@ export default function Login() {
               </div>
             </motion.div>
 
+
             <motion.h2
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-900 mb-6"
+              className="text-3xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-900 mb-6"
             >
-              Bienvenido de vuelta
+              Bienvenido
             </motion.h2>
 
             <AnimatePresence>
@@ -419,9 +423,13 @@ export default function Login() {
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleSocialLogin("Cuenta de la Iglesia")}
                   disabled={loading}
-                  className="w-full flex justify-center items-center bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 shadow"
+                  className="w-full flex justify-center items-center bg-[#076e90] hover:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 shadow"
                 >
-                  <RiShieldUserFill className="h-5 w-5" />
+                  <img
+                    src="https://edge.fscdn.org/assets/static/media/church-symbol-new-46.7b4e672a10b119f73cf1.png"
+                    alt="Church Symbol"
+                    className="h-5 w-5 object-contain"
+                  />
                 </motion.button>
               </motion.div>
             </div>
