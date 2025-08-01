@@ -43,7 +43,6 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 bg-cover bg-center">
       <div className="w-full max-w-md bg-white/90 rounded-xl shadow-2xl p-8 sm:p-10 backdrop-blur-md">
         <div className="flex justify-center mb-8">
-          {/* Aquí puedes insertar un logo si deseas */}
         </div>
 
         <h2 className="text-3xl font-extrabold text-center text-[#023866] mb-6">
